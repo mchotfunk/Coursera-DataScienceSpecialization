@@ -1,0 +1,139 @@
+---
+title: "R_Programming Assgn1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The point of this assignment is to know how to do a simple for loop, combining all the files into a same file, subsetting the data with conditions you wish, and then return the results.
+
+
+
+```{r  part1}
+
+library(data.table)
+
+#Example: Create a blank vector, and duplicate it.
+
+nums <- c(2,4,6,8)
+dup <- numeric() #the blank one
+for (num in nums) {
+        dup<- c(dup,nums) #the new dup=  blank dup + nums
+        
+}
+
+
+#part 1
+
+pollutantmean <- function(directory, pollutant, id= 1:332) {
+        
+        filelist<- list.files(path=directory, pattern= ".csv", full.names=TRUE)#Read the list of files, indicating full route ( full.names)
+        values<- numeric() #Create a blank numeric vector, create before the for loop
+        
+        for (i in id){
+        data<-read.csv(filelist[i]) # read the filelist
+        values <- c(values, data[[pollutant]])   # add the value into the blank vector you created before, use double [] to locate the var  
+        }
+        mean(values,na.rm=TRUE)
+        
+}
+
+pollutantmean("/users/andrewhu/desktop/Coursera/specdata","sulfate")
+pollutantmean("specdata", "sulfate", 1:10)
+pollutantmean("specdata", "nitrate", 70:72)
+pollutantmean("specdata", "sulfate", 34)
+pollutantmean("specdata", "nitrate")
+```
+
+```{r  part2}
+
+#part2
+
+#Making examples
+data<- read.csv("specdata/001.csv")
+#get the number of complete cases
+sum(complete.cases(data)) #117 complete cases in 001.csv
+
+#Checking the length of filelist
+filelist<- list.files(path="specdata", pattern=".csv",full.names = TRUE) 
+length(filelist) # check to get all the files
+
+
+
+complete<- function(directory, id= 1:332) {
+        filelist<-list.files(path=directory,pattern=".csv", full.names = TRUE) #list all the files 
+        nobs<- numeric() #create a empty vector
+        
+        for (i in id) {
+        data<- read.csv(filelist[i])
+        nobs<- c(nobs,sum(complete.cases(data))) #add value into the original blank vector, nobs
+             
+        }
+        nobs #return the nobs
+        data.frame(id,nobs) #Create a simple df
+}
+complete("specdata",1:10)
+
+cc <- complete("specdata", c(6, 10, 20, 34, 100, 200, 310))
+print(cc$nobs)
+
+cc <- complete("specdata", 54)
+print(cc$nobs)
+
+set.seed(42)
+cc <- complete("specdata", 332:1)
+use <- sample(332, 10)
+print(cc[use, "nobs"])
+
+```
+
+
+```{r  part3}
+#partIII
+corr<- function(directory, threshold=0) {
+        
+        filelist= list.files(path =directory, pattern =".csv", full.names = TRUE )#create a filelist 
+        dat<- numeric() # blank numeric vector
+        
+        for (i in 1:length(filelist)) {
+        temp<- read.csv(filelist[i]) #reading files
+        temp<- temp[complete.cases(temp),] #subsetting complete cases
+        nrow<- nrow(temp) #counting the rows
+        if (nrow > threshold) {
+        dat<- c(dat, cor(temp$sulfate,temp$nitrate))    } #if nrow> threshold then return the correlation   
+                
+        }
+        dat
+}
+
+cr <- corr("specdata")                
+cr <- sort(cr)                
+set.seed(868)                
+out <- round(cr[sample(length(cr), 5)], 4)
+print(out)
+
+cr <- corr("specdata")                
+cr <- sort(cr)                
+set.seed(868)                
+out <- round(cr[sample(length(cr), 5)], 4)
+print(out)
+
+
+cr <- corr("specdata", 129)                
+cr <- sort(cr)                
+n <- length(cr)                
+set.seed(197)                
+out <- c(n, round(cr[sample(n, 5)], 4))
+print(out)
+
+cr <- corr("specdata", 2000)                
+n <- length(cr)                
+cr <- corr("specdata", 1000)                
+cr <- sort(cr)
+print(c(n, round(cr, 4)))
+
+
+
+```
