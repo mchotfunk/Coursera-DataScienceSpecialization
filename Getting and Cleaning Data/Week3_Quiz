@@ -1,0 +1,40 @@
+library(jpeg)
+library(data.table)
+library(dplyr)
+
+
+#Q1
+
+acs <- read.csv("ACS.csv")
+acs[which(acs$ACR==3 & acs$AGS ==6),]
+
+acs$logical = ifelse(acs$ACR==3 & acs$AGS==6,TRUE,FALSE)
+which(acs$logical)
+
+
+#Q2: skip
+readJPEG("https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg",native=TRUE)
+
+#Q3:
+
+#Using data.table: fread *** Really useful
+GDP <- fread("GDP.csv",skip=4, nrow=190, select=c(1,2,4,5), col.names = c("CountryCode","Rank","Economy","Dollars"))
+EDU <- fread("EDU.csv")
+
+
+merge<- merge(GDP,EDU, by="CountryCode")
+
+head(merge,n=13)
+merge<- arrange(merge,desc(Rank))
+
+
+
+#Q4: What is the average GDP ranking for the "High income: OECD" and "High income: nonOECD" group?
+merge<- group_by(merge,`Income Group`)
+summarise(merge, oecd=mean(Rank,na.rm=TRUE))
+
+
+
+#Q5: Cut the GDP ranking into 5 separate quantile groups. Make a table versus Income.Group. 
+merge$gdpr = cut2(merge$Rank, g=5)
+table(merge$gdpr, merge$`Income Group`)
