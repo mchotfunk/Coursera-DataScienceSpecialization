@@ -7,6 +7,7 @@ output: html_document
 library(jpeg)
 library(data.table)
 library(dplyr)
+library(Hmisc)
 
 
 #Q1
@@ -23,7 +24,7 @@ readJPEG("https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg",native=TRUE)
 
 #Q3:
 
-#Using data.table: fread *** Really useful
+#Using data.table: fread *** Really useful ***
 GDP <- fread("GDP.csv",skip=4, nrow=190, select=c(1,2,4,5), col.names = c("CountryCode","Rank","Economy","Dollars"))
 EDU <- fread("EDU.csv")
 
@@ -42,7 +43,7 @@ summarise(merge, oecd=mean(Rank,na.rm=TRUE))
 
 
 #Q5: Cut the GDP ranking into 5 separate quantile groups. Make a table versus Income.Group. 
-merge$gdpr = cut2(merge$Rank, g=5)
+merge$gdpr = cut2(merge$Rank, g=5) #Refers to "Easier cutting"
 table(merge$gdpr, merge$`Income Group`)
 ```
 
