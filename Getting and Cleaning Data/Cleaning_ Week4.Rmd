@@ -1,0 +1,52 @@
+---
+title: "Getting and Cleaning Data_Week4"
+output: html_document
+---
+
+```{r }
+#Week 4
+
+#Editing text var
+
+camera<- fread("cameras.csv")
+names(camera)
+
+#make name lowercase
+tolower(names(camera))
+
+
+#fixing character vectors sub()
+
+names(review)
+
+sub("_","",names(review))
+test<- "this_is_a_test"
+sub("_","",test)#only edit the first encounter
+gsub("_","",test)#edit all
+
+#Finding values in text
+grep("Alameda", camera$intersection) #tells you the location
+grep("Alameda", camera$intersection, value=TRUE) #return the value
+
+#Subsetting with the finding values
+camera2 <- camera[!grepl("Alameda",camera$intersection),]
+
+#paste0: leave no space
+
+paste0("Andrew","Hu")
+
+
+
+#Regular Expressions
+
+# $ represent for the end of a line
+# morning$
+# ^ will start looking for the begining of the line
+
+#Creating dates
+x =c("1jan1960", "2jan1960","31mar1960","30jul1960"); z= as.Date(x, "%d%b%Y") #day, month, year
+z
+
+z[1]- z[2]
+
+```
