@@ -1,0 +1,111 @@
+---
+title: "Coursera_Cleaning the data_Week1"
+output: html_document
+---
+XML
+Extensible markup language (getting data from Internet)
+
+Compoenets:
+-Markup
+-Content
+
+Read XML file
+```{r setup, include=FALSE}
+library(XML)
+library(RCurl)
+
+#set up url and download the file
+fileUrl<- "http://www.w3schools.com/xml/simple.xml"
+download.file(fileUrl, "/users/andrewhu/desktop/Coursera/simple.xml")
+doc<- xmlTreeParse("/users/andrewhu/desktop/Coursera/simple.xml", useInternalNodes = TRUE) #wrapped up
+rootNode<- xmlRoot(doc) #access to the element 
+xmlName(rootNode) #get the name
+
+#locate, reference
+rootNode[[1]]
+rootNode[[1]][[1]]
+
+xmlSApply(rootNode,xmlValue) 
+
+xpathSApply(rootNode,"//name",xmlValue)
+xpathSApply(rootNode,"//price",xmlValue)
+
+#Reading Html file
+
+fileUrl2 <- "http://espn.go.com/nfl/team/_/name/bal/baltimore-ravens"
+download.file(fileUrl2, "/users/andrewhu/desktop/Coursera/simple2.html")
+doc2<- htmlTreeParse("/users/andrewhu/desktop/Coursera/simple2.html", useInternalNodes = TRUE)
+
+scores<- xpathSApply(doc2,"//li[@class='score']",xmlValue)
+teams <- xpathSApply(doc2,"//li[@class='team-name']", xmlValue)
+
+
+
+
+
+library(jsonlite)
+jsonData<- fromJSON("http://api.github.com/users/jtleek/repos")
+names(jsonData)
+names(jsonData$owner)
+
+myjson <- toJSON(iris,pretty = TRUE)
+cat(myjson)
+
+iris2 <- fromJSON(myjson)
+head(iris2)
+
+
+#Data.table
+
+#simply create a data table
+
+DT= data.table(x=rnorm(9), y=rep(c("a","b","c"),each=3),z=rnorm(9))
+head(DT,3)
+
+#subsetting rows
+DT[2:3,]
+DT[c(2,3)] #these two are the same
+
+DT[,c(2,3)] #all rows with columns 2 and 3
+
+#Calculate values 
+DT[,list(mean(x),sum(z))]
+
+#Adding new columns
+DT[,w:= z^2]
+
+#Logical operations
+DT[,a:= x>0]
+
+#calculate mean, set by a
+
+DT[,b:= mean(x+w), by=a]
+
+
+#SetKeys: like a reference
+DT <- data.table(x=rep(c("a","b","c"),each=100),y=rnorm(100))
+setkey(DT,x)
+DT['b']
+
+###Fast read (reference from quiz)
+
+#Read the table
+housing <- data.table::fread ("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv")
+#How many is val = 24 
+
+housing[VAL==24, .N]
+
+
+```
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

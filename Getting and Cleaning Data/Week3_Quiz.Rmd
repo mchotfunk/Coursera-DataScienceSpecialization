@@ -13,10 +13,10 @@ library(Hmisc)
 #Q1
 
 acs <- read.csv("ACS.csv")
-acs[which(acs$ACR==3 & acs$AGS ==6),]
+acs[which(acs$ACR==3 & acs$AGS ==6),]#directly subset
 
-acs$logical = ifelse(acs$ACR==3 & acs$AGS==6,TRUE,FALSE)
-which(acs$logical)
+acs$logical = ifelse(acs$ACR==3 & acs$AGS==6,TRUE,FALSE)#create logical var
+which(acs$logical)#apply to which (shows the loaction)
 
 
 #Q2: skip
@@ -32,7 +32,7 @@ EDU <- fread("EDU.csv")
 merge<- merge(GDP,EDU, by="CountryCode")
 
 head(merge,n=13)
-merge<- arrange(merge,desc(Rank))
+merge<- arrange(merge,desc(Rank))#sort
 
 
 
