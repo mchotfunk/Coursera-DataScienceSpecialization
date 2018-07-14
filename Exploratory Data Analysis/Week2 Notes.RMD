@@ -1,4 +1,10 @@
-#Week 2 Notes
+---
+title: "Week2 Notes.RMD"
+output: html_document
+
+
+---
+```{r Lattice Plotting}
 
 ############Lattice plotting system#########
 
@@ -40,10 +46,11 @@ xyplot(y~x | f, panel= function(x,y,...) {
         panel.lmline(x,y, col=2) #slr line
         
 }) 
+```
 
-
-
-
+----
+Introduction for qplot, a simple version
+```{Simple qplot}
 ######  ggplot2 : qplot#####
 library(ggplot2)
 str(mpg)
@@ -67,10 +74,19 @@ qplot(hwy, data=mpg, fill= drv)#seperate by drv
 qplot(displ, hwy, data=mpg, facets= .~drv)
 qplot(hwy, data= mpg, facets= drv~.)
 
+```
 
+Basic components of a ggplot
 
-######  ggplot2: ggplot#####
+1. A df
+2. aesthetic mappings: how data area mapped to color
+3. geoms: geometric, e.g. points, lines, shapes
+4. facets: for conditional plots (subsetting)
+5. stats: statistical transformations like binning, quantiles, smoothing
+6. scales: what scale an aesthetic map uses( e.g. male= red)
+7. coordinate system
 
+```{r }
 
 g<- ggplot(df, aes(x,y))
 print(g) #no layers yet
@@ -85,4 +101,14 @@ g+ geom_point() #auto print plot object
 
 
 
+```
 
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
