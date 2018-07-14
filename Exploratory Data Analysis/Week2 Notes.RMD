@@ -1,6 +1,7 @@
 ---
 title: "Week2 Notes.RMD"
 output: html_document
+Subject: ggplot2 introduction
 
 
 ---
