@@ -2,7 +2,7 @@
 title: "Week2 Notes.RMD"
 output: html_document
 
-
+Lattice Plotting Intro
 ---
 ```{r Lattice Plotting}
 
@@ -48,9 +48,12 @@ xyplot(y~x | f, panel= function(x,y,...) {
 }) 
 ```
 
-----
-Introduction for qplot, a simple version
-```{Simple qplot}
+
+
+ggplot2 Introduction:
+
+Simple version: qplot
+```{r Simple qplot}
 ######  ggplot2 : qplot#####
 library(ggplot2)
 str(mpg)
@@ -86,29 +89,120 @@ Basic components of a ggplot
 6. scales: what scale an aesthetic map uses( e.g. male= red)
 7. coordinate system
 
-```{r }
 
-g<- ggplot(df, aes(x,y))
+Basic structure for ggplot
+```{r }
+#Base
+
+#example
+g<- ggplot(mpg, aes(displ,hwy))
 print(g) #no layers yet
 
+#Assign points
 p<- g + geom_point() #save and print ggplot object
 print(p)
 
 g+ geom_point() #auto print plot object
 
 
+#More layers: smooth 
+g + geom_point() + geom_smooth(method= "lm")
+
+#More layers: facet (seperate by a factor var)
+g + geom_point() + facet_grid(. ~drv) +geom_smooth(method= "lm")
+
+
+```
+
+Annotation:
+
+Labels: xlab(), ylab(), labs(), ggtitle()
+"geom" functions has options to modify
+
+Modifying Aesthetics:
+```{r }
+#Constant value of colors
+g+ geom_point(color= "steelblue", size =4, alpha= 1/2)
+
+#Color seperated by factor variable
+g + geom_point(aes(color=drv), size=4, alpha= 1/2)
+
+
+```
+Modifying labels:
+```{r }
+g + geom_point(aes(color = drv)) + labs(title = "MPG", x= "DISPL", y= "HWY")
 
 
 
 
 ```
 
-## Including Plots
+Customizing the Smooth:
+```{r}
+g + geom_point(aes(color=drv), size= 2, alpha=1/2)+ geom_smooth(size=4, linetype = 3, method= "lm", se=FALSE)
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Changing the Theme:
+```{r}
+g + geom_point(aes(color=drv)) + theme_bw(base_family = "Times")
+
+
+
+```
+
+
+Notes about Axis Limits:
+```{r}
+testdat <- data.frame(x = 1:100, y=rnorm(100))
+testdat[50,2] <-100  ##set outlier
+plot(testdat$x, testdat$y, type= "l", ylim=c(-3,3))
+
+
+g<- ggplot(testdat, aes(x=x, y=y))
+g +geom_line()
+
+
+```
+Plotting the variables: Factor + Continuous
+
+So now, how do we plot the relationship between categorical and continuous variables?
+Previously, we just seperate the plotting by factor variables(e.g. drive type, or BMI type)
+But now we need to seperate them into a factor and a continuous type. Hence, we need to :
+
+Transform continuous into a certain range of factors: using cut() functions
+
+
+```{r}
+#Not able to access the data so just take notes
+
+#Calculate the deciles of the data
+cutpoints <- quantile(df$var, seq(0,1, length= 4), na.rm=TRUE)
+
+df$newvar <- cut(df$var, cutpoints)
+
+#see levels
+levels(df$newvar)
+
+
+```
+
+Summary
+```{r}
+
+#Base
+g<- ggplot(df, aes(x,y))
+
+#Add layer
+        g+
+        geom_point(...) +
+        facet_wrap(var1~ var2, nrow= 2, ncol=4) +
+        geom_smooth(method="lm", se=FALSE, col="steelblue") +
+        theme_bw(base_family= "Avenir", base_size = 10) +
+        labs(title= "", x="", y="")
+
+
+
+```
