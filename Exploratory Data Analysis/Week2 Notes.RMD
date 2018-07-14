@@ -2,8 +2,9 @@
 title: "Week2 Notes.RMD"
 output: html_document
 
-Lattice Plotting Intro
+
 ---
+Lattice Plotting System: Intro
 ```{r Lattice Plotting}
 
 ############Lattice plotting system#########
