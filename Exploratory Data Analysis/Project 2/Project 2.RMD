@@ -1,7 +1,8 @@
 ---
 title: "Exploratory Data Analysis Project 2"
-output: html_document
-
+output:
+  pdf_document: default
+  html_document: default
 ---
 # This is the final project for "Exploratory Data Analysis"
 
@@ -18,28 +19,29 @@ This case study not only help me understand how to initiate a basic exploratory 
 5. tapply: applying function to a variable grouping by a factor, returing a numeric vector
 6. aggregate: applying function to a variable grouping by a list, returing a data frame
 
----
+
 Data Insturctions (copy from Coursera):
 
-PM2.5 Emissions Data (\color{red}{\verb|summarySCC_PM25.rds|}summarySCC_PM25.rds): This file contains a data frame with all of the PM2.5 emissions data for 1999, 2002, 2005, and 2008. For each year, the table contains number of tons of PM2.5 emitted from a specific type of source for the entire year. Here are the first few rows.
+PM2.5 Emissions Data (summarySCC_PM25.rds): This file contains a data frame with all of the PM2.5 emissions data for 1999, 2002, 2005, and 2008. For each year, the table contains number of tons of PM2.5 emitted from a specific type of source for the entire year. Here are the first few rows.
 
-\color{red}{\verb|fips|}fips: A five-digit number (represented as a string) indicating the U.S. county
-\color{red}{\verb|SCC|}SCC: The name of the source as indicated by a digit string (see source code classification table)
-\color{red}{\verb|Pollutant|}Pollutant: A string indicating the pollutant
-\color{red}{\verb|Emissions|}Emissions: Amount of PM2.5 emitted, in tons
-\color{red}{\verb|type|}type: The type of source (point, non-point, on-road, or non-road)
-\color{red}{\verb|year|}year: The year of emissions recorded
-Source Classification Code Table (\color{red}{\verb|Source_Classification_Code.rds|}Source_Classification_Code.rds): This table provides a mapping from the SCC digit strings in the Emissions table to the actual name of the PM2.5 source. The sources are categorized in a few different ways from more general to more specific and you may choose to explore whatever categories you think are most useful. For example, source “10100101” is known as “Ext Comb /Electric Gen /Anthracite Coal /Pulverized Coal”.
+fips: A five-digit number (represented as a string) indicating the U.S. county
+SCC: The name of the source as indicated by a digit string (see source code classification table)
+Pollutant: A string indicating the pollutant
+Emissions: Amount of PM2.5 emitted, in tons
+type: The type of source (point, non-point, on-road, or non-road)
+year: The year of emissions recorded
+ 
+Source_Classification_Code.rds: This table provides a mapping from the SCC digit strings in the Emissions table to the actual name of the PM2.5 source. The sources are categorized in a few different ways from more general to more specific and you may choose to explore whatever categories you think are most useful. For example, source “10100101” is known as “Ext Comb /Electric Gen /Anthracite Coal /Pulverized Coal”.
 
----
 
 ```{r }
 #Basic: Reading data and setting working directory
 library(ggplot2)
-NEI <- readRDS("summarySCC_PM25.rds")
-SCC <- readRDS("Source_Classification_Code.rds")
-setwd("/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Exploratory Data Analysis")
+NEI <- readRDS("/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Exploratory Data Analysis/summarySCC_PM25.rds")
+SCC <- readRDS("/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Exploratory Data Analysis/Source_Classification_Code.rds")
+
 ```
+
 
 Question 1: 
 
@@ -57,9 +59,11 @@ Emi_over_year_total<- with(NEI, tapply(Emissions, year, sum, na.rm=T))
 #basic plot
 plot(Emi_over_year_total, type="o", xlab="Year", ylab= "Emissions")
 ```
+
+---
 Question 2: 
 
-Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (\color{red}{\verb|fips == "24510"|}fips=="24510") from 1999 to 2008? Use the base plotting system to make a plot answering this question.
+Have total emissions from PM2.5 decreased in the Baltimore City, Maryland (fips == "24510") from 1999 to 2008? Use the base plotting system to make a plot answering this question.
 
 Solution: We need to subset a data set from the original data, with only the Baltimore City, and then we use the same tapply function to return a numeric vector with total emissions by each year.
 
@@ -72,10 +76,11 @@ Emi_over_year_BA <- with(NEIBA, tapply(Emissions, year, sum, na.rm=TRUE))
 str(Emi_over_year_BA)#note: the sturcture is a numeric vector
 plot(Emi_over_year_BA, type="o", xlab= "Year", ylab= "Emissions")
 ```
+
 ---
 Question 3: 
 
-Of the four types of sources indicated by the \color{red}{\verb|type|}type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? Which have seen increases in emissions from 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
+Of the four types of sources indicated by the type (point, nonpoint, onroad, nonroad) variable, which of these four sources have seen decreases in emissions from 1999–2008 for Baltimore City? Which have seen increases in emissions from 1999–2008? Use the ggplot2 plotting system to make a plot answer this question.
 
 Solution: Now we want to examine four types of sources within Baltimore city. First, we need to use the aggregate function, to return a data frame that has three variables we are interested: Type, year and Emissions.
 
@@ -99,6 +104,7 @@ g<- ggplot(Emi_over_year_BA_df, aes(factor(year),Emissions) )
 #
 g + geom_point()+ facet_grid(. ~type)
 ```
+
 ---
 Question 4: 
 Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
@@ -162,10 +168,12 @@ g<- ggplot(NEI.onroad , aes(x= factor(year),y= Emissions, fill=type))
 #
 g + geom_bar(stat= "identity")
 ```
+
 ---
-Question 6: Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (\color{red}{\verb|fips == "06037"|}fips=="06037"). Which city has seen greater changes over time in motor vehicle emissions?
+Question 6: Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (fips == "06037"). Which city has seen greater changes over time in motor vehicle emissions?
 
 Solution: Simply plot BA / LA and compare. I use basic plotting system so as to set plotting parameters to plot two column at once.
+
 
 ```{r }
 NEIBAONROAD <- subset(NEI, fips=="24510" & type == "ON-ROAD")
