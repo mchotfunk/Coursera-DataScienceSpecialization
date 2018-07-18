@@ -3,7 +3,7 @@ title: "Exploratory Data Analysis Project 2"
 output: html_document
 
 ---
-# This is the final project for "Exploratory Data Analysis", by JHU on Coursera.
+# This is the final project for "Exploratory Data Analysis"
 
 The case study we are doing is to examine the emissions of PM2.5 across year 1999~ 2008 within US, looking for specific city such as Baltimore, LA, and also looking for specific type, such as On-road, off-road. 
 
@@ -48,6 +48,7 @@ Have total emissions from PM2.5 decreased in the United States from 1999 to 2008
 Solution: we use tapply to calculate total emissions by year, and it will return a numeric vector indicating the sum of emissions for each year.
 
 **Structure for tapply**
+
 tapply(the var you want to calculate, by xxx factor, the function)**
 
 ```{r }
