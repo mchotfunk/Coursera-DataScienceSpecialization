@@ -1,6 +1,8 @@
 ---
 title: "Reproducible Research Project 1"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 Reading the data and loading library
 ```{r,echo=TRUE }
