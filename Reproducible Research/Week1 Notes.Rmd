@@ -1,0 +1,56 @@
+---
+title: "Reproducible Research Notes.RMD"
+output: html_document
+---
+RMD Demo
+```{r ,echo=TRUE}
+
+library(datasets)
+data("airquality")
+summary(airquality)
+
+
+```
+
+##Incorporating Graphics
+```{r simulatedata, echo=TRUE}
+x <- rnorm(100) ; y<- x+ rnorm(100,sd=0.5)
+
+
+```
+
+
+Here is a scatterplot of the data
+```{r scatterplot, fig.height=4}
+par(mar=c(5,4,1,1), las=1)
+plot(x,y, main="My Simualte Data")
+
+
+
+```
+
+
+```{r fitmodel}
+library(datasets)
+data("airquality")
+fit <- lm(Ozone~ Wind+ Temp +Solar.R, data=airquality
+          )
+```
+
+Here is a table of regression coefficients
+```{r showtable, results="asis"}
+
+library(xtable)
+xt<- xtable(summary(fit))
+print(xt, type="html")
+```
+
+
+##Setting Global Options  
+Use : opts_chunk$set(echo= FALSE, results="hide")
+```{r setoptions, echo=FALSE}
+opts_chunk$set(echo= FALSE, results="hide")
+
+```
+
+First simulate data
