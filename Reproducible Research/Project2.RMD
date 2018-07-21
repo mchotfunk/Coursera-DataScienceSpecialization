@@ -1,0 +1,123 @@
+---
+title: "Reproducible Research Project 2"
+output: html_document
+---
+
+# Synopsis
+
+The basic goal of this assignment is to explore the NOAA Storm Database and answer two questions: which types of events are most harmful to population health and which types of events have the greatest economic consequences. From the data set, we found out that **TORNADO** has the largest impact on damaging both population and economy.
+
+# Data Processing 
+
+## Reading the raw data
+```{r reading data ,echo=TRUE}
+storm<- read.csv("/users/andrewhu/desktop/storm.csv")
+```
+
+
+## Previewing the structure of the data
+```{r Previwing the raw data ,echo=TRUE}
+head(storm)
+dim(storm)
+```
+
+## Finding the variables we are interested
+
+The columns we are intersted related to the **harmfulness of Population**, are the "Fatalities" and "Injuries". Here we take a look of their summaries:
+```{r summaries for population damages ,echo=TRUE}
+summary(storm$FATALITIES)
+summary(storm$INJURIES)
+```
+
+Create a variable called **dmg_pop** indicating the damage of the population, combining the fatalities and injuries.
+```{r dmg_pop ,echo=TRUE}
+storm$dmg_pop = storm$FATALITIES + storm$INJURIES
+```
+
+Calculate the dmg_pop by each type of events and return a new data frame
+
+```{r popdamage ,echo=TRUE}
+popdamage <- aggregate(dmg_pop~EVTYPE, data=storm, sum)
+
+```
+
+Simply taking a look of the new data frame we just create, we found that there are a lot of EVTYPE, and many of the EVTYPE contain 0 dmg_pop
+
+```{r ,echo=TRUE}
+summary(popdamage)
+head(popdamage)
+```
+
+Hence, we need to "summary" the popdamage data frame. We can subset a data frame which contains top 5 damages for each EVTYPE.
+```{r ,echo=TRUE}
+library(dplyr)
+popdmgtop5 <- popdamage %>% arrange(desc(dmg_pop)) %>% slice(1:5)
+```
+
+
+Now, the variables we are interested for population damage related are processed finished. Let's take a loot at economic damage-related variables, which are "PROPDMG" and "CROPDMG".
+
+
+```{r ,echo=TRUE}
+summary(storm$PROPDMG)
+summary(storm$CROPDMG)
+```
+
+Then, just as the steps we created for the damage for population above, we simply create a variable indicating the total impact for the economic damage, combining the two variables.
+
+```{r ,echo=TRUE}
+storm$dmg_eco <- storm$PROPDMG + storm$CROPDMG
+```
+
+Now, calculate the sum of dmg_eco for each event type and return a data frame
+
+```{r ,echo=TRUE}
+ecodamage <- aggregate(dmg_eco ~ EVTYPE, data=storm, sum)
+```
+
+Simply take a look at the new data frame for eco damage:
+
+```{r ,echo=TRUE}
+head(ecodamage)
+```
+
+
+Filter the ecodamage for containing top 5 damges of EVTYPE only:
+
+```{r ,echo=TRUE}
+library(dplyr)
+ecodmgtop5 <- ecodamage %>% arrange(desc(dmg_eco)) %>% slice(1:5)
+```
+
+# Results
+
+Now, simply printing out the popdmgtop5 and ecodmgtop5, we can have an idea of which EVTYPE has the largest impact on the population and economy:
+```{r ,echo=TRUE}
+popdmgtop5
+ecodmgtop5
+```
+
+In addition, let's do some plots.
+
+Population Damage:
+```{r ggplot for popdmgtop5 ,echo=TRUE}
+library(ggplot2)
+##ggplot
+#base
+g<- ggplot(popdmgtop5, aes(x=EVTYPE, y=dmg_pop))
+#
+g + geom_bar(stat= "identity") + labs(title= "Top 5 Events for Population Damage")
+
+```
+
+Economic Damage:
+```{r ggplot for ecodmgtop5 ,echo=TRUE}
+##ggplot
+#base
+g<- ggplot(ecodmgtop5, aes(x=EVTYPE, y=dmg_eco))
+#
+g + geom_bar(stat= "identity") + labs(title= "Top 5 Events for Economic Damage")
+
+```
+
+
