@@ -1,0 +1,180 @@
+---
+title: "Statistical Inference Notes.RMD"
+output: html_document
+---
+# Introduction
+
+1. Simple introduction (e.g. Mutual exclusive...)
+2. Random, Discrete and continuous variables.
+        Random: Numeric outcome from an experiment
+        Discrete: Countable numbers
+        Continuous: Any value on the real line
+        
+3. PMF (Probability Mass Function): evaluated at a value corresponds to the probability that a random variable takes that value
+4. PDF (Probability Dense Function): Associated with *continuous* variables. (At a certain point of probability)
+5. CDF: Cumulative Distribution
+6. Survival = 1- CDF
+
+
+# Conditional 
+
+## Diagnostic tests
+
+- Let $+$ and $-$ be the events that the result of a diagnostic test is positive or negative respectively
+- Let $D$ and $D^c$ be the event that the subject of the test has or does not have the disease respectively 
+- The **sensitivity** is the probability that the test is positive given that the subject actually has the disease, $P(+ ~|~ D)$
+- The **specificity** is the probability that the test is negative given that the subject does not have the disease, $P(- ~|~ D^c)$
+
+
+## More definitions
+
+- The **positive predictive value** is the probability that the subject has the  disease given that the test is positive, $P(D ~|~ +)$
+- The **negative predictive value** is the probability that the subject does not have the disease given that the test is negative, $P(D^c ~|~ -)$
+- The **prevalence of the disease** is the marginal probability of disease, $P(D)$
+
+---
+
+## More definitions
+
+- The **diagnostic likelihood ratio of a positive test**, labeled $DLR_+$, is $P(+ ~|~ D) / P(+ ~|~ D^c)$, which is the $$sensitivity / (1 - specificity)$$
+- The **diagnostic likelihood ratio of a negative test**, labeled $DLR_-$, is $P(- ~|~ D) / P(- ~|~ D^c)$, which is the $$(1 - sensitivity) / specificity$$
+
+
+# Variance
+
+- The variance of a random variable is a measure of *spread*
+- If $X$ is a random variable with mean $\mu$, the variance of $X$ is defined as
+
+$$
+Var(X) = E[(X - \mu)^2] = E[X^2] - E[X]^2
+$$ 
+
+
+## The sample variance 
+- The sample variance is 
+$$
+S^2 = \frac{\sum_{i=1} (X_i - \bar X)^2}{n-1}
+$$
+(almost, but not quite, the average squared deviation from
+the sample mean)
+- It is also a random variable
+  - It has an associate population distribution
+  - Its expected value is the population variance
+  - Its distribution gets more concentrated around the population variance with more data
+- Its square root is the sample standard deviation
+
+
+
+## Recall the mean
+- Recall that the average of random sample from a population 
+is itself a random variable
+- We know that this distribution is centered around the population
+mean, $E[\bar X] = \mu$
+- We also know what its variance is $Var(\bar X) = \sigma^2 / n$
+- This is very useful, since we don't have repeat sample means 
+to get its variance; now we know how it relates to
+the population variance
+- We call the standard deviation of a statistic a standard error
+
+
+## To summarize
+- The sample variance, $S^2$, estimates the population variance, $\sigma^2$
+- The distribution of the sample variance is centered around $\sigma^2$
+- The the variance of sample mean is $\sigma^2 / n$
+  - Its logical estimate is $s^2 / n$
+  - The logical estimate of the standard error is $s / \sqrt{n}$
+- $s$, the standard deviation, talks about how variable the population is
+- $s/\sqrt{n}$, the standard error, talks about how variable averages of random samples of size $n$ from the population are
+
+
+## The Bernoulli distribution
+
+- The **Bernoulli distribution** arises as the result of a binary outcome
+- Bernoulli random variables take (only) the values 1 and 0 with probabilities of (say) $p$ and $1-p$ respectively
+- The PMF for a Bernoulli random variable $X$ is $$P(X = x) =  p^x (1 - p)^{1 - x}$$
+- The mean of a Bernoulli random variable is $p$ and the variance is $p(1 - p)$
+- If we let $X$ be a Bernoulli random variable, it is typical to call $X=1$ as a "success" and $X=0$ as a "failure"
+
+
+## The normal distribution: Practice
+
+
+
+## Assume that the number of daily ad clicks for a company 
+is (approximately) normally distributed with a mean of 1020 and a standard
+deviation of 50. What's the probability of getting
+more than  1,160 clicks in a day?
+
+Method1:
+
+```{r}
+pnorm(1160,1020, 50, lower.tail=FALSE)
+```
+Method2:
+(1160-1020) / 50 = 2.8
+```{r}
+pnorm(2.8,lower.tail = FALSE)
+```
+
+
+## Example
+
+Assume that the number of daily ad clicks for a company 
+is (approximately) normally distributed with a mean of 1020 and a standard
+deviation of 50. What number of daily ad clicks would represent
+the one where 75% of days have fewer clicks (assuming
+days are independent and identically distributed)?
+
+```{r}
+qnorm(0.75,1020,50)
+```
+
+## The Poisson distribution
+* Used to model counts
+* The Poisson mass function is
+$$
+P(X = x; \lambda) = \frac{\lambda^x e^{-\lambda}}{x!}
+$$
+for $x=0,1,\ldots$
+* The mean of this distribution is $\lambda$
+* The variance of this distribution is $\lambda$
+* Notice that $x$ ranges from $0$ to $\infty$
+
+---
+## Some uses for the Poisson distribution
+* Modeling count data  
+* Modeling event-time or survival data
+* Modeling contingency tables
+* Approximating binomials when $n$ is large and $p$ is small
+
+
+## Example
+The number of people that show up at a bus stop is Poisson with
+a mean of $2.5$ per hour.
+
+If watching the bus stop for 4 hours, what is the probability that $3$
+or fewer people show up for the whole time?
+
+```{r}
+ppois(3, lambda = 2.5 * 4)
+```
+
+## Poisson approximation to the binomial
+* When $n$ is large and $p$ is small the Poisson distribution
+  is an accurate approximation to the binomial distribution
+* Notation
+  * $X \sim \mbox{Binomial}(n, p)$
+  * $\lambda = n p$
+  * $n$ gets large 
+  * $p$ gets small
+
+---
+## Example, Poisson approximation to the binomial
+
+We flip a coin with success probablity $0.01$ five hundred times. 
+
+What's the probability of 2 or fewer successes?
+
+```{r}
+pbinom(2, size = 500, prob = .01)
+ppois(2, lambda=500 * .01)
