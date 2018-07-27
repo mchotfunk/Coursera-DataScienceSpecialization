@@ -61,7 +61,30 @@ Ans: It should be near the mean, .5
 
 Q8:Poisson
 
+
 The number of people showing up at a bus stop is assumed to be Poisson with a mean of 5 5 people per hour. You watch the bus stop for 3 hours. About what's the probability of viewing 10 or fewer people?
 ```{r}
 ppois(10, lambda = 15)
 ```
+
+In a population of interest, a sample of 9 men yielded a sample average brain volume of 1,100cc and a standard deviation of 30cc. What is a 95% Student's T confidence interval for the mean brain volume in this new population?
+
+```{r}
+#Formula : 
+#ts= qt(1 - alpha / 2, n - 1)
+# mean + - ts*  std/sqrt(n)
+
+1100 + c(-1, 1) * qt(1- 0.05/2, 9-1) * 30 / sqrt(9)
+```
+A diet pill is given to 9 subjects over six weeks. The average difference in weight (follow up - baseline) is -2 pounds. What would the standard deviation of the difference in weight have to be for the upper endpoint of the 95% T confidence interval to touch 0?
+
+```{r}
+# mean + - ts*  std/sqrt(n)
+#ts= qt(1- alpha/2, n-1)
+ts = qt(0.975,8) #2.306
+#s <- -x_bar*sqrt(n) / ts
+
+-2*sqrt(9)/x
+```
+
+

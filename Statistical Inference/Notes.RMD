@@ -2,6 +2,9 @@
 title: "Statistical Inference Notes.RMD"
 output: html_document
 ---
+Note: A lot of the content are summarized from : ...
+
+
 # Introduction
 
 1. Simple introduction (e.g. Mutual exclusive...)
@@ -178,3 +181,78 @@ What's the probability of 2 or fewer successes?
 ```{r}
 pbinom(2, size = 500, prob = .01)
 ppois(2, lambda=500 * .01)
+```
+
+
+
+
+## T Confidence intervals
+
+## Note's about the t interval
+
+- The t interval technically assumes that the data are iid normal, though it is robust to this assumption
+- It works well whenever the distribution of the data is roughly symmetric and mound shaped
+- **Paired observations** are often analyzed using the t interval by taking differences
+- For large degrees of freedom, t quantiles become the same as standard normal quantiles; therefore this interval converges to the same interval as the CLT yielded
+- For skewed distributions, the spirit of the $t$ interval assumptions are violated
+  - Also, for skewed distributions, it doesn't make a lot of sense to center the interval at the mean
+  - In this case, consider taking logs or using a different summary like the median
+- For highly discrete data, like binary, other intervals are available
+
+
+Data practice: (Paired Sample T-test)
+
+```{r}
+data(sleep)
+
+g1 <- sleep$extra[1 : 10]; g2 <- sleep$extra[11 : 20]
+difference <- g2 - g1
+mn <- mean(difference); s <- sd(difference); n <- 10
+
+mn + c(-1, 1) * qt(.975, n-1) * s / sqrt(n)
+# mean +- relevant t quantile and multiply by standard error
+t.test(difference)
+t.test(g2, g1, paired = TRUE)
+t.test(extra ~ I(relevel(group, 2)), paired = TRUE, data = sleep)
+#these three are the same
+```
+
+## P-values
+* The P-value is the probability under the null hypothesis of obtaining evidence as extreme or more extreme than that obtained
+* Is the smallest value for alpha for which you can still reject the null hypothesis
+
+## Power
+
+- Power is the probability of rejecting the null hypothesis when it is false
+- You want more power
+- A type II error (a bad thing), is **failing to reject the null hypothesis when it's false**; the probability of a type II error is usually called beta
+- Note Power = 1 - beta
+
+**Example**
+Test: Whether the mu is 30 or larger than 30. Interested in dececting the mu is as large as 32.
+```{r, echo=TRUE,eval=TRUE}
+mu0 = 30; mua = 32; sigma = 4; n = 16; alpha=0.5
+z = qnorm(1 - alpha)
+pnorm(mu0 + z * sigma / sqrt(n), mean = mu0, sd = sigma / sqrt(n), 
+      lower.tail = FALSE)
+pnorm(mu0 + z * sigma / sqrt(n), mean = mua, sd = sigma / sqrt(n), 
+      lower.tail = FALSE)
+```
+
+
+## T test Power
+
+Calculate the power, given n.
+```{r}
+power.t.test(n = 16, delta = 2 / 4, sd=1, type = "one.sample",  alt = "one.sided")$power
+power.t.test(n = 16, delta = 2, sd=4, type = "one.sample",  alt = "one.sided")$power
+power.t.test(n = 16, delta = 100, sd=200, type = "one.sample", alt = "one.sided")$power
+```
+
+Calculate Sample size needed, given power
+```{r}
+power.t.test(power = .8, delta = 2 / 4, sd=1, type = "one.sample",  alt = "one.sided")$n
+power.t.test(power = .8, delta = 2, sd=4, type = "one.sample",  alt = "one.sided")$n
+power.t.test(power = .8, delta = 100, sd=200, type = "one.sample", alt = "one.sided")$n
+```
+
