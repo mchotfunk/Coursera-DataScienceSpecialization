@@ -1,0 +1,94 @@
+---
+title: 'Statistical Inference: Project Part 2'
+output:
+  pdf_document: default
+  html_document: default
+---
+Part 2: Basic Inferential Data Analysis Instructionsless 
+Now in the second portion of the project, we're going to analyze the ToothGrowth data in the R datasets package.
+
+Load the ToothGrowth data and perform some basic exploratory data analyses
+Provide a basic summary of the data.
+
+Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+State your conclusions and the assumptions needed for your conclusions.
+
+** Loading the libraries and dataset** 
+```{r setup, include=FALSE}
+library(datasets)
+library(ggplot2)
+data("ToothGrowth")
+```
+
+## Summary of the data
+
+```{r tooth}
+summary(ToothGrowth)
+```
+
+
+## Head of the data (Simply a preview)
+```{r pressure, echo=FALSE}
+head(ToothGrowth)
+```
+
+## Basic Exploratory Analysis
+
+```{r}
+# Convert dose to factor
+ToothGrowth$dose = as.factor(ToothGrowth$dose)
+
+#Plot tooth length  vs. the dose, separating by delivery method (supp)
+
+g <- ggplot(ToothGrowth, aes(x=dose, y= len))
+g + geom_boxplot(aes(fill=dose)) +facet_grid(.~supp) + ggtitle("Tooth Length vs. Doses, by Supplement Method")
+
+#Plot tooth length vs. supplement method, separating by different doses
+
+g<- ggplot(ToothGrowth, aes(x=supp, y= len))
+g + geom_boxplot(aes(fill=supp)) + facet_grid(.~dose) + ggtitle("Tooth Length vs. Supplement Method, by doses")
+```
+
+## Hypothesis T-test
+
+** Compare tooth length and doses **
+
+```{r}
+#Compare dose with 0.5, 1.0
+t.test(len~dose,data= subset(ToothGrowth, dose %in% c(0.5, 1.0)))
+
+#Compare dose with 1.0, 2.0
+t.test(len~dose,data= subset(ToothGrowth, dose %in% c(1.0, 2)))
+
+#Compare dose with 0.5 2.0
+t.test(len~dose,data= subset(ToothGrowth, dose %in% c(0.5, 2)))
+```
+
+**Conclusion**
+We can reject the Null hypothesis.
+
+Reason:
+
+P-Values from all of the above T-test are <0.05.
+
+Hence, given the 95% confidence interval, the result is significant. This indicates that as the doses change(increase), the length of the tooth will also change(increase). 
+
+
+
+** Compare tooth length and Supplement Method **
+
+```{r}
+t.test(len~supp, data=ToothGrowth)
+```
+
+**Conclusion **
+We cannot rejuect the Null hypothesis.
+
+Reason:
+
+P-Values from the t-test is >0.05.
+
+Hence, given the 95% confidence interval, which covers 0 within the range, the result indicates that it is not significant. To sum up, as the supplement method changes, the tooth length might not be changed. The supplement method has no effect on the growth of teeth length.
+
+

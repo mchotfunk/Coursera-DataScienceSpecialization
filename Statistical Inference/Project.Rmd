@@ -1,5 +1,5 @@
 ---
-title: "Final Project"
+title: "Statistical Inference: Final Project Part 1"
 output:
   pdf_document: default
   html_document: default
@@ -89,4 +89,4 @@ qqnorm(mean_si)
 qqline(mean_si, col = 2)
 ```
 
-  According to CLT, the distribution of avg of 40 exponentials is close to normal distribution.
+**According to CLT, the distribution of avg of 40 exponentials is close to normal distribution.** 

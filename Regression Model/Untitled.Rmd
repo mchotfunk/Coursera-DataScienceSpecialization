@@ -3,7 +3,7 @@ title: "Week1"
 output: html_document
 ---
 
-# Regression to the mean:
+##  Regression to the mean:
 
 * Suppose that we normalize X (child's height) and Y (parent's height) so that they both have mean 0 and variance 1. 
 * Then, recall, our regression line passes through (0, 0), (the mean of the X and Y).
@@ -46,7 +46,7 @@ newx <- c(0.16, 0.27, 0.34)
 predict(fit, newdata = data.frame(carat = newx))
 ```
 
-# Residuals
+## Residuals
 
 Represents variation left unexplained by our model.
 
