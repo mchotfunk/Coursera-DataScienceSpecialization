@@ -1,0 +1,236 @@
+---
+title: "Regression Model Notes"
+output: html_document
+---
+
+##  Regression to the mean:
+
+* Suppose that we normalize X (child's height) and Y (parent's height) so that they both have mean 0 and variance 1. 
+* Then, recall, our regression line passes through (0, 0), (the mean of the X and Y).
+* If the slope of the regression line is Cor(Y,X), regardless of which variable is the outcome (recall, both standard deviations are 1).
+* Notice if X is the outcome and you create a plot where $X$ is the horizontal axis, the slope of the least squares line that you plot is 1/Cor(Y, X). 
+
+```{r }
+library(UsingR)
+data(father.son)
+#Normalize
+y <- (father.son$sheight - mean(father.son$sheight)) / sd(father.son$sheight)
+x <- (father.son$fheight - mean(father.son$fheight)) / sd(father.son$fheight)
+
+#correlation
+rho <- cor(x, y)
+
+```
+
+
+## Fitting the data: Diamond exercise
+```{r cars}
+library(UsingR)
+data(diamond)
+fit <- lm(price ~ carat, data = diamond)
+coef(fit)
+# For every increase one unit increase in carat, we expect the price will increase by 3721.0249
+```
+
+## Getting a more interpretable intercept
+```{r, echo = TRUE}
+#mean center the predictor variables, carat
+fit2 <- lm(price ~ I(carat - mean(carat)), data = diamond)
+coef(fit2)
+# Intercept: Expected price for the average sized diamond, in this case is 0.2042
+```
+
+## Predicting the price of the diamonds
+```{r pressure, echo=FALSE}
+newx <- c(0.16, 0.27, 0.34)
+predict(fit, newdata = data.frame(carat = newx))
+```
+
+## Residuals
+
+Represents variation left unexplained by our model.
+
+## Multivariate Regression Model
+
+The interpretation of a multivariate regression coefficient is the expected change in the response per unit change in the regressor, holding all of the other regressors fixed.
+
+**Example 1: Swiss Data**
+
+```{r}
+require(datasets); data(swiss); require(GGally);
+summary(lm(Fertility ~ . , data = swiss))
+
+```
+
+**Interpretation** 
+
+Note: the Agriculture is expressed in percentage
+
+
+For the Agricultrue coefficient -0.17211, this indicates that every one percent increase in Agriculture, the Fertility will decrease 0.17211. 
+
+
+## Dummy Variables
+
+**Example 2: Insect Sprays**
+
+Preview the data set with plot
+```{r}
+require(datasets);data(InsectSprays); require(stats); require(ggplot2)
+g = ggplot(data = InsectSprays, aes(y = count, x = spray, fill  = spray))
+g = g + geom_violin(colour = "black", size = 2)
+g = g + xlab("Type of spray") + ylab("Insect count")
+g
+```
+
+Linear model fit, reference= group A
+```{r}
+summary(lm(count ~ spray, data = InsectSprays))$coef
+#Note: the coefficient for intercept is for SprayA.
+```
+
+
+Hard code with customized reference level
+```{r}
+# Force the reference level to be A. Should have the same result as above
+summary(lm(count ~ 
+             I(1 * (spray == 'B')) + I(1 * (spray == 'C')) + 
+             I(1 * (spray == 'D')) + I(1 * (spray == 'E')) +
+             I(1 * (spray == 'F')), data = InsectSprays))$coef
+```
+
+If you include all of the 6 level, the coefficient for the reference group will be NA, because it is redundant.
+
+```{r}
+summary(lm(count ~ 
+   I(1 * (spray == 'B')) + I(1 * (spray == 'C')) +  
+   I(1 * (spray == 'D')) + I(1 * (spray == 'E')) +
+   I(1 * (spray == 'F')) + I(1 * (spray == 'A')), data = InsectSprays))$coef
+```
+
+
+Remove the intercept:
+```{r}
+summary(lm(count~spray-1, InsectSprays))$coef
+```
+
+
+The following should return the same result (cofficient above):
+
+```{r}
+require(dplyr)
+summarise(group_by(InsectSprays,spray), mn= mean(count))
+```
+
+
+Practice of reordring the levels
+
+```{r}
+spray2 <- relevel(InsectSprays$spray, "C")
+summary(lm(count ~ spray2, data = InsectSprays))$coef
+```
+
+Summary of the Insect Sprays data:
+
+* If we treat Spray as a factor, R includes an intercept and omits the alphabetically first level of the factor.
+  * All t-tests are for comparisons of Sprays versus Spray A.
+  * Emprirical mean for A is the intercept.
+  * Other group means are the itc plus their coefficient. 
+* If we omit an intercept, then it includes terms for all levels of the factor. 
+  * Group means are the coefficients. 
+  * Tests are tests of whether the groups are different than zero. (Are the expected counts zero for that spray.)
+* If we want comparisons between, Spray B and C, say we could refit the model with C (or B) as the reference level. 
+
+
+** Recall of the Swiss Data: Binary variable practice ** 
+
+Reading the data
+```{r}
+library(datasets); library(dplyr); data(swiss)
+```
+
+
+## Create a binary variable
+```{r}
+swiss <- mutate(swiss, CatholicBin = 1* (Catholic>50))
+head(swiss)
+```
+
+## Residuals
+
+Definition: the vertical distance between the data point and the fitted regerssion line.
+
+
+Swiss data re-visit:
+```{r}
+data(swiss); par(mfrow = c(2, 2))
+fit <- lm(Fertility ~ . , data = swiss); plot(fit)
+```
+
+# The imapact of unnecessary or necessary included variables on our regression coefficients
+
+
+## Variance inflation factors
+* Notice variance inflation was much worse when we included a variable that
+was highly related to `x1`. 
+* We don't know $\sigma$, so we can only estimate the increase in the actual standard error of the coefficients for including a regressor.
+* However, $\sigma$ drops out of the relative standard errors. If one sequentially adds variables, one can check the variance (or sd) inflation for including each one.
+* When the other regressors are actually orthogonal to the regressor of interest, then there is no variance inflation.
+* The variance inflation factor (VIF) is the increase in the variance for the ith regressor compared to the ideal setting where it is orthogonal to the other regressors.
+  * (The square root of the VIF is the increase in the sd ...)
+* Remember, variance inflation is only part of the picture. We want to include certain variables, even if they dramatically inflate our variance. 
+
+## Revisting our previous simulation
+```{r, echo = TRUE}
+##doesn't depend on which y you use,
+y <- x1 + rnorm(n, sd = .3)
+a <- summary(lm(y ~ x1))$cov.unscaled[2,2]
+c(summary(lm(y ~ x1 + x2))$cov.unscaled[2,2],
+  summary(lm(y~ x1 + x2 + x3))$cov.unscaled[2,2]) / a
+temp <- apply(betas, 1, var); temp[2 : 3] / temp[1]
+```
+
+---
+## Swiss data
+```{r}
+data(swiss); 
+fit1 <- lm(Fertility ~ Agriculture, data = swiss)
+a <- summary(fit1)$cov.unscaled[2,2]
+fit2 <- update(fit, Fertility ~ Agriculture + Examination)
+fit3 <- update(fit, Fertility ~ Agriculture + Examination + Education)
+  c(summary(fit2)$cov.unscaled[2,2],
+    summary(fit3)$cov.unscaled[2,2]) / a 
+```
+
+---
+## Swiss data VIFs, 
+```{r}
+library(car)
+fit <- lm(Fertility ~ . , data = swiss)
+vif(fit)
+sqrt(vif(fit))
+```
+
+Note: the Examination and Education are highly correlated. Hence, their vif is really high.
+
+the Infant. Mortality rate is not correlated with other variables, so it has a low VIF.
+
+
+## How to do nested model testing in R
+```{r}
+fit1 <- lm(Fertility ~ Agriculture, data = swiss)
+fit3 <- update(fit, Fertility ~ Agriculture + Examination + Education)
+fit5 <- update(fit, Fertility ~ Agriculture + Examination + Education + Catholic + Infant.Mortality)
+anova(fit1, fit3, fit5)#use anova table to test whether you should include certain variables
+```
+
+## Summary:
+
+* If we underfit the model, the variance estimate is biased. 
+* If we correctly or overfit the model, including all necessary covariates and/or unnecessary covariates, the variance estimate is unbiased.
+* However, the variance of the variance is larger if we include unnecessary variables.
+
+
+    
+
+
