@@ -194,6 +194,39 @@ x <- c(0.586, 0.166, -0.042, -0.614, 11.72)
 y <- c(0.549, -0.026, -0.127, -0.751, 1.344)
 fit<- lm(y~x)
 dfbetas(fit)[,2]
+```
 
+
+Consider the space shuttle data \verb|?shuttle|?shuttle in the \verb|MASS|MASS library. Consider modeling the use of the autolander as the outcome (variable name \verb|use|use). Fit a logistic regression model with autolander (variable auto) use (labeled as "auto" 1) versus not (0) as predicted by wind sign (variable wind). Give the estimated odds ratio for autolander use comparing head winds, labeled as "head" in the variable headwind (numerator) to tail winds (denominator).
+
+```{r}
+library(MASS)
+data("shuttle")
+summary(shuttle)
+
+#Create a binary variable
+shuttle <- mutate(shuttle, auto=1* (use=="auto"), wind=factor(wind))
+
+#glm model
+fit1 <- glm(auto~wind-1,family = binomial(link="logit"), shuttle)
+summary(fit1)
+
+#Calculate Odds Ratio
+coe <- summary(fit1)$coef
+
+#Ans
+exp(coe[1,1]-coe[2,1])
+```
+
+
+Consider the previous problem. Give the estimated odds ratio for autolander use comparing head winds (numerator) to tail winds (denominator) adjusting for wind strength from the variable magn.
+
+```{r}
+fit2 <- glm(auto~wind + factor(magn)-1, family=binomial(link="logit"), shuttle)
+coe2 <-summary(fit2)$coef
+coe2
+exp(coe2[1,1]-coe2[2,1])
 
 ```
+
+

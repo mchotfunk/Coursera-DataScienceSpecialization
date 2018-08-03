@@ -231,6 +231,3 @@ anova(fit1, fit3, fit5)#use anova table to test whether you should include certa
 * However, the variance of the variance is larger if we include unnecessary variables.
 
 
-    
-
-

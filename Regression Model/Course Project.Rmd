@@ -1,0 +1,109 @@
+---
+title: "Final Project, Regression Model"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Executive Summary:
+
+This project is set to explore the relationship between a set of variables and miles per gallon. We need to answer: 
+
+1. Is an automatic or manual transmission better for MPG 
+
+2. Quantify the MPG difference between automatic and manual transmissions
+
+
+After analyzing the ```mtcars``` data, we can conclude that manual transmission produces more mpg compared to auto transmission. And according to our best fitted model, manual transmission achieve 2.936 more mpg than auto transmission
+
+
+# Analysis:
+
+
+Loading libraries and datasets
+```{r setup}
+library(datasets)
+library(ggplot2)
+library(dplyr)
+data(mtcars)
+```
+
+Transformation:
+```{r}
+mtcars<- mutate(mtcars, am=factor(mtcars$am,labels=c("Auto","Manual")), vs=factor(vs),gear=factor(gear), carb=factor(carb))
+```
+
+
+Basic preview:
+```{r cars}
+head(mtcars)
+```
+
+
+Exploratory analysis (Boxplot for Transmission method vs. MPG)
+```{r pressure}
+g <- ggplot(mtcars, aes(x=factor(am), y= mpg))
+g + geom_boxplot(aes(fill=factor(am))) + ggtitle("Transmission vs MPG")
+```
+
+
+## Building models:
+
+Method 1: (reference: how to build nested model in R)
+```{r}
+fit <- lm(mpg ~ factor(am), data = mtcars)
+fit2 <- update(fit, mpg ~ factor(am) + wt)
+fit3 <- update(fit, mpg ~ factor(am)+ wt + hp)
+fit4 <- update(fit, mpg ~ factor(am)+ wt + hp + qsec)
+fit5<- update(fit, mpg ~ factor(am)+ wt + hp + qsec + cyl)
+anova(fit, fit2, fit3, fit4, fit5)#use anova table to test whether you should include certain variables
+```
+
+Method 2: Stepwise
+
+```fit_step <- step(fit, direction="both")```
+```{r,include=FALSE}
+fit<- lm(mpg~. ,data=mtcars)
+fit_step <- step(fit, direction="both")
+```
+
+
+Comparison:
+```{r}
+summary(fit)
+summary(fit_step)
+```
+**Conclusion** :
+
+Comparing the initial model (putting all the variables) and our best model(fit_step), we can conclude that the original model has a 0.78 Adjusted R square, meaning that there is only 78% of the variables is explained by this model. However, we have a higher Adjusted R square, 0.834, in our best fitted model.
+
+** Coefficient interpretation **
+
+For every other variables stay the same, manual transmission will increase 2.936 more mpg, compared to auto transmission
+
+
+## Model diagnosis
+
+Residual analysis:
+```{r}
+plot(fit_step)
+```
+
+**Residuals vs. Fitted :**
+
+The residuals are scattered, ensuring the independence between fitted values and residuals. If there is any pattern, then we should change the model.
+
+**Q-Q Plot:**
+
+The points are mostly closed with the line. Hence, we can suggest that the residuals are nornally distributed.
+
+
+## Statistical inference:
+
+**T-test**
+```{r}
+t.test(mpg~am, mtcars)
+```
+
+**Conclusion**
+
+According to the t-test, we can reject the null hypothesis that the transmission method will not have an impact on the mpg.
