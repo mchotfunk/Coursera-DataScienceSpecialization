@@ -399,8 +399,6 @@ capAveTruth <- (capAveTruth-mean(capAveTruth))/sd(capAveTruth)
 
 
 ## Load example data
-
-
 ```{r loadData,cache=TRUE}
 library(ISLR); library(caret); data(Wage);
 inTrain <- createDataPartition(y=Wage$wage,
@@ -740,3 +738,92 @@ modFitAll<- train(wage ~ .,data=training,method="lm")
 pred <- predict(modFitAll, testing)
 qplot(wage,pred,data=testing)
 ```
+
+
+
+
+---
+
+
+
+Quiz:
+
+Load the Alzheimer's disease data using the commands:
+
+```
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
+testing = adData[-inTrain,]
+
+```
+Find all the predictor variables in the training set that begin with IL. Perform principal components on these variables with the preProcess() function from the caret package. Calculate the number of principal components needed to capture 90% of the variance. How many are there?
+
+
+```{r}
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
+testing = adData[-inTrain,]
+
+IL_str <- grep("^IL", colnames(training), value = TRUE)
+preProc <- preProcess(training[, IL_str], method = "pca", thresh = 0.9)
+preProc$rotation
+```
+
+
+
+Load the Alzheimer's disease data using the commands:
+
+
+```
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
+testing = adData[-inTrain,]
+```
+Create a training data set consisting of only the predictors with variable names beginning with IL and the diagnosis. Build two predictive models, one using the predictors as they are and one using PCA with principal components explaining 80% of the variance in the predictors. Use method="glm" in the train function.
+
+What is the accuracy of each method in the test set? Which is more accurate?
+
+```{r}
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433); data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
+testing = adData[-inTrain,]
+
+IL_str <- grep("^IL", colnames(training), value = TRUE)
+
+training <- adData[IL_str,]
+testing <- adData[-IL_str,]
+
+
+## grep the predictors starting with 'IL'
+IL_str <- grep("^IL", colnames(training), value = TRUE)
+## make a subset of these predictors
+predictors_IL <- predictors[, IL_str]
+df <- data.frame(diagnosis, predictors_IL)
+inTrain = createDataPartition(df$diagnosis, p = 3/4)[[1]]
+training = df[inTrain, ]
+testing = df[-inTrain, ]
+
+#Non-PCA model
+modelFit1 <- train(diagnosis ~ ., method = "glm", data = training)
+pd1<- predict(modelFit1, testing)
+confusionMatrix(pd1,testing$diagnosis)
+
+#PCA model
+modelFit2 <- train(diagnosis ~ ., method = "glm", preProcess = "pca", 
+    data = training, trControl = trainControl(preProcOptions = list(thresh = 0.8)))
+confusionMatrix(predict(modelFit2, testing),testing$diagnosis)
+```
+
