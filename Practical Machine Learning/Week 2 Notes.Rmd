@@ -26,7 +26,7 @@ output:
 ```{r loadPackage}
 library(caret); library(kernlab); data(spam)
 inTrain <- createDataPartition(y=spam$type,
-                              p=0.75, list=FALSE) #predict type, use 75% to train the model and 20% to test
+                              p=0.75, list=FALSE) #predict type, use 75% to train the model and 25% to test
 
 #subset
 training <- spam[inTrain,]
@@ -73,7 +73,7 @@ confusionMatrix(predictions,testing$type)
 # Data Slicing
 ```{r}
 inTrain <- createDataPartition(y=spam$type,
-                              p=0.75, list=FALSE) #predict type, use 75% to train the model and 20% to test
+                              p=0.75, list=FALSE) #predict type, use 75% to train the model and 25% to test
 
 #subset
 training <- spam[inTrain,]
@@ -336,7 +336,7 @@ modelFit
 
 ```{r ,dependson="loadPackage",cache=TRUE,fig.height=3.5,fig.width=7}
 preObj <- preProcess(training[,-58],method=c("BoxCox"))
-trainCapAveS <- predict(preObj,training[,-58])$capitalAve
+trainCapAveS <- predict(preObj,training[,-58]$capitalAve)
 par(mfrow=c(1,2)); hist(trainCapAveS); qqnorm(trainCapAveS)
 ```
 
@@ -356,7 +356,7 @@ training$capAve[selectNA] <- NA #set them to NA
 
 # Impute and standardize
 preObj <- preProcess(training[,-58],method="knnImpute")
-capAve <- predict(preObj,training[,-58])$capAve
+capAve <- predict(preObj,training[,-58]$capAve)
 
 # Standardize true values
 capAveTruth <- training$capitalAve
@@ -765,9 +765,10 @@ Find all the predictor variables in the training set that begin with IL. Perform
 ```{r}
 library(caret)
 library(AppliedPredictiveModeling)
-set.seed(3433)data(AlzheimerDisease)
+set.seed(3433); data(AlzheimerDisease)
 adData = data.frame(diagnosis,predictors)
-inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
 testing = adData[-inTrain,]
 
 IL_str <- grep("^IL", colnames(training), value = TRUE)
@@ -788,7 +789,7 @@ adData = data.frame(diagnosis,predictors)
 inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]training = adData[ inTrain,]
 testing = adData[-inTrain,]
 ```
-Create a training data set consisting of only the predictors with variable names beginning with IL and the diagnosis. Build two predictive models, one using the predictors as they are and one using PCA with principal components explaining 80% of the variance in the predictors. Use method="glm" in the train function.
+Create a training data set consisting of only the predictors with variable names beginning with IL and the diagnosis. Build two predictive models, one using the predictors as they are and one using PCA with principal components **explaining 80% of the variance in the predictors**. Use method="glm" in the train function.
 
 What is the accuracy of each method in the test set? Which is more accurate?
 
@@ -817,9 +818,9 @@ training = df[inTrain, ]
 testing = df[-inTrain, ]
 
 #Non-PCA model
-modelFit1 <- train(diagnosis ~ ., method = "glm", data = training)
-pd1<- predict(modelFit1, testing)
-confusionMatrix(pd1,testing$diagnosis)
+modelFit1 <- train(diagnosis ~ ., method = "glm", data = training) #no pre-process
+pd1<- predict(modelFit1, testing) #use training model to predict testing set
+confusionMatrix(pd1,testing$diagnosis) #check for accuracy
 
 #PCA model
 modelFit2 <- train(diagnosis ~ ., method = "glm", preProcess = "pca", 

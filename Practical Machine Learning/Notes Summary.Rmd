@@ -1,0 +1,117 @@
+---
+title: "Machine Learning Summary"
+output: html_document
+---
+
+# Data Splitting
+
+*Libraries needed: (data for example)*
+```{r setup, include=FALSE}
+library(caret); library(kernlab); data(spam); library(ISLR); library(ggplot2); library(gridExtra);data(Wage) ;library(Hmisc)
+```
+
+
+*Training and test set*
+```{r simple training and test}
+inTrain <- createDataPartition(y=spam$type, p=0.75, list=FALSE)
+training <- spam[inTrain,]
+testing <- spam[-inTrain,]
+```
+
+*Fit a Linear model and check the final model*
+```{r pressure, echo=FALSE}
+modelFit <- train(type ~.,data=training, method="glm") 
+modelFit$finalModel
+```
+
+*Use model to predict the test set:*
+```{r}
+predictions <- predict(modelFit,newdata=testing)
+```
+
+*Confusion matrix: Checking the accuracy*
+```{r}
+confusionMatrix(predictions,testing$type) #use predictions to check the outcome in the test set
+```
+
+*K-fold:*
+```{r}
+folds <- createFolds(y=spam$type,k=10,
+                             list=TRUE,returnTrain=TRUE)
+sapply(folds,length)
+```
+
+*Feature plot: reveal the relationship between each variables*
+```{r}
+featurePlot(x=training[,c("age","education","jobclass")],
+            y = training$wage,
+            plot="pairs")
+```
+
+----
+
+# Standardizing: Dealing with skewness
+
+*Center and scale:*
+```{r}
+modelFit <- train(type ~.,data=training,
+                  preProcess=c("center","scale"),method="glm")
+```
+
+*Box-Cox:*
+```{r}
+preObj <- preProcess(training[,-58],method=c("BoxCox"))
+trainCapAveS <- predict(preObj,training[,-58]$capitalAve)
+```
+
+
+*Imputing data (dealing with missing values):*
+```{r}
+preObj <- preProcess(training[,-58],method="knnImpute")
+capAve <- predict(preObj,training[,-58]$capAve)
+```
+
+---
+
+# Building features:
+
+*Dummies:*
+```{r}
+dummies <- dummyVars(wage ~ jobclass,data=training)
+head(predict(dummies,newdata=training))
+```
+
+*Check near-zero-covariates*
+```{r}
+nsv <- nearZeroVar(training,saveMetrics=TRUE)
+```
+
+---
+
+# PCA (Combining features)
+
+```{r}
+modelFit <- train(training$type ~ .,method="glm",preProcess="pca",data=training)
+confusionMatrix(testing$type,predict(modelFit,testing))
+```
+
+---
+
+# Predicting with linear regression:
+
+*Fit a slr:*
+```{r}
+lm1 <- lm(eruptions ~ waiting,data=trainFaith)
+summary(lm1)
+#same us
+lm <- train(eruptions~ waiting, method="lm",data=training)
+summary(lm$finalModel)
+```
+
+*Prediction with interval:*
+Use your model building with training set, to predict the test set
+```{r}
+pred1 <- predict(lm1,newdata=testFaith,interval="prediction")
+```
+
+
