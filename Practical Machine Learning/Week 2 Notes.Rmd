@@ -41,7 +41,6 @@ set.seed(32343)
 modelFit <- train(type ~.,data=training, method="glm") #use all variables, and use "training" dataset to build the training model
 
 modelFit
-
 ```
 
 
@@ -543,9 +542,9 @@ plot(spamPC[,1],spamPC[,2],col=typeColor)
 
 ## Preprocessing with PCA: Completed process elaboration
 ```{r}
-preProc <- preProcess(log10(training[,-58]+1),method="pca",pcaComp=2)
-trainPC <- predict(preProc,log10(training[,-58]+1))
-modelFit <- train(training$type ~ .,method="glm",data=trainPC)
+preProc <- preProcess(log10(training[,-58]+1),method="pca",pcaComp=2) #Pre-pcoess with th traiing data and exclude the outcome, set pca variables to 2
+trainPC <- predict(preProc,log10(training[,-58]+1)) #using the preProcess model to predict the training data
+modelFit <- train(training$type ~ .,method="glm",data=trainPC) 
 testPC <- predict(preProc,log10(testing[,-58]+1))
 confusionMatrix(testing$type,predict(modelFit,testPC))
 ```
@@ -645,10 +644,11 @@ summary(modFit$finalModel) #same with our SLR
 
 ## Example: Wage data
 
-**1. Loading libraries and subsetting the data (exclude the outcome)**
+**1. Loading libraries and subsetting the data **
 ```{r}
 library(ISLR); library(ggplot2); library(caret);
-data(Wage); Wage <- subset(Wage,select=-c(logwage))
+data(Wage) 
+Wage <- subset(Wage,select=-c(logwage)) #duplicate
 summary(Wage)
 ```
 
