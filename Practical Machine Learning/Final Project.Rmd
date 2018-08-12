@@ -1,0 +1,194 @@
+---
+title: 'Practical Machine Learning Final Project'
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+# Executive Summary
+
+In this project, we want to predict which type (A~E) of the weight-lifting did the participant perform using all of the variables in the data set. First, I clean the data by excluding the sequence-variable ("X") and timestamp-related variables, which are not useful in our predictions, and then I look for any near-zero-variance variables and eliminate them also. Models I tried include Classification Tree Model, Gradient Boost Model (gbm), Random Forest (rf), Latent Dirichlet Allocation (lda), Support vector machine (svm), and a model combining with RF, lda and gbm. After analyzing, I found that the combining model reaches the highest accuracy, with the 5- fold cross validation.
+
+
+## Background: (Copy from Coursera)
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways.  
+
+## Objective:
+
+Predict the manner in which they did the exercise. This is the "classe" variable in the training set. Create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases.
+
+
+---
+
+
+## Loading libraries and data sets
+```{r setup}
+library(caret)
+library(kernlab)
+library(ISLR)
+library(ggplot2)
+library(gridExtra)
+library(Hmisc)
+library(elasticnet)
+library(e1071)
+library(randomForest)
+library(rattle)
+
+pml_train <- read.csv("/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Practical Machine Learning/Data/pml-training.csv")
+pml_test <- read.csv("/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Practical Machine Learning/Data/pml-testing.csv")
+```
+
+
+## Cleaning data
+
+First of all, we can have a quick preview of this data set:
+```{r preview}
+head(pml_train)
+```
+
+Then we can realize that the "X", "user_name", and "timestamp-related" variables are not useful predictors in our study. Hence, we need to remove them:
+```{r}
+#Remove user-name
+pml_train <- subset(pml_train, select=-c(X,cvtd_timestamp,user_name,raw_timestamp_part_1,raw_timestamp_part_2))
+```
+
+And then, there are a lot of variables having **near zero variance**. We also need to exclude them.
+```{r}
+#remove near-zero var
+nzv<- nearZeroVar(pml_train,saveMetrics=T)
+pml_train<- pml_train[,nzv$nzv==FALSE]
+```
+
+Finally, there are still a lot of variables that contain many missing values. If a variable has more than 85% of the missing value, I decide to "kick them out".
+```{r}
+#Remove NA more than 85%
+pml_train <-pml_train[, colMeans(is.na(pml_train)) <=.15] 
+```
+
+Now we have prepared our data. Let's devide the data set into training set and testing set: (75% to training set)
+```{r splitting}
+#Data Splitting:
+set.seed(777)
+inTrain <-createDataPartition(y=pml_train$classe,p=0.75, list=FALSE) 
+
+training <- pml_train[inTrain,]
+testing <- pml_train[-inTrain,]
+
+#Check the dim for traning and testing
+dim(training)
+dim(testing)
+```
+
+## Fit Models:
+
+Now we can try to train our model with the training data set.
+
+First, we set a standard of 5 folds for our cross-validation:
+```{r para}
+#Fit-Control parameters
+set.seed(777)
+fitControl <- trainControl(method = "repeatedcv",
+                           number = 5,
+                           repeats = 1)
+```
+
+
+## ** Classification Tree **:
+```{r rpart}
+#classification tree 
+set.seed(777)
+fit_rpart <- train(classe ~ ., preProcess= c("center","scale"), method="rpart",data=training) #Note:To avoid skewness, I use center and scale in the pre-process method.
+
+
+#Print our model
+print(fit_rpart)
+
+#Predict using our classification tree model
+pred_rp <- predict(fit_rpart,testing)
+
+#Use confusion matrix to check accuracy
+confusionMatrix(pred_rp,testing$classe)$overall[[1]] 
+
+#Plot the tree
+fancyRpartPlot(fit_rpart$finalModel)
+```
+
+
+## ** Random Forest **:
+```{r rf}
+#randomForest
+set.seed(777)
+fit_rf <- train(classe ~ ., preProcess= c("center","scale"), method="rf", 
+                trControl=fitControl,verbose=FALSE,data=training)
+#print our rf model
+print(fit_rf)
+
+#Predict the testing data set using our rf model
+pred_rf <- predict(fit_rf, testing)
+
+#Use confusion matrix to check accuracy
+confusionMatrix(pred_rf,testing$classe)$overall[[1]]  
+
+#Check the importance of our variables
+ImpVar <- varImp(fit_rf)
+ImpVar
+
+#Plot
+plot(fit_rf, main="Accuracy of RF model by the number of predictors")
+```
+
+
+## ** lda model **:
+```{r lda}
+#lda
+set.seed(777)
+fit_lda <- train(classe ~ ., preProcess= c("center","scale"), method="lda", 
+                trControl=trainControl(method="cv", number=5),data=training)
+
+pred_lda <- predict(fit_lda,testing)
+
+confusionMatrix(pred_lda,testing$classe)$overall[[1]] 
+```
+
+## ** svm model **:
+```{r svm}
+#svm
+set.seed(777)
+fit_svm <-svm(classe~., data=training)
+pred_svm <- predict(fit_svm,testing)
+confusionMatrix(pred_svm,testing$classe)$overall[[1]] 
+```
+
+## ** Gradient Boost Model **:
+```{r gmb}
+#gbm
+set.seed(777)
+fit_gbm <- train(classe~., method="gbm",preProcess= c("center","scale"),data=training,trControl=fitControl,verbose=FALSE)
+
+print(fit_gbm)
+
+pred_gbm <- predict(fit_gbm,testing)
+
+confusionMatrix(pred_gbm,testing$classe)$overall[[1]] 
+```
+
+
+## ** Combining model: randomForest, gradient boost model and lda **
+```{r comb}
+comb_df <-data.frame(pred_gbm,pred_lda,pred_rf,classe=testing$classe)
+
+#Stack all the models using random Forest
+set.seed(777)
+fit_comb <- train(classe~. , method="rf",preProcess= c("center","scale"),data=comb_df,trControl=fitControl,verbose=FALSE)
+
+pred_comb <- predict(fit_comb,comb_df)
+
+confusionMatrix(pred_comb,testing$classe)$overall[[1]] 
+```
+
+# Conclusion:
+
+Comparing all the models above, I find that the combining model has the highest accuracy. Hence, the model combining with random Forest, gbm and lda is the most ideal one to predict what type of weight-lifting did the participants perfom in our study.
+

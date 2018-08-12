@@ -1,0 +1,91 @@
+---
+title: "Week 4 Notes"
+output: html_document
+---
+
+# Combining Predictors
+
+## Key ideas
+
+* You can combine classifiers by averaging/voting
+* Combining classifiers improves accuracy
+* Combining classifiers reduces interpretability
+* Boosting, bagging, and random forests are variants on this theme
+
+## Example
+
+__Create training, test and validation sets__
+
+```{r wage}
+library(ISLR); data(Wage); library(ggplot2); library(caret);
+
+
+# Create a building data set and validation set
+inBuild <- createDataPartition(y=Wage$wage,
+                              p=0.7, list=FALSE)
+validation <- Wage[-inBuild,]; buildData <- Wage[inBuild,]
+
+inTrain <- createDataPartition(y=buildData$wage,
+                              p=0.7, list=FALSE)
+training <- buildData[inTrain,]; testing <- buildData[-inTrain,]
+```
+
+__ Build two different models, glm and randomForest __
+
+```{r modFit}
+mod1 <- train(wage ~.,method="glm",data=training)
+mod2 <- train(wage ~.,method="rf",
+              data=training, 
+              trControl = trainControl(method="cv"),number=3)
+```
+
+__ Predict on the testing set using the models we built __
+
+```{r predict}
+pred1 <- predict(mod1,testing); pred2 <- predict(mod2,testing)
+```
+
+
+__ Fit a model that combines predictors __
+
+```{r combine,dependson="predict"}
+predDF <- data.frame(pred1,pred2,wage=testing$wage) #Create a data frame combining pred1 and 2, and the outcome from testing set --> "Combining data set"
+combModFit <- train(wage ~.,method="gam",data=predDF) #use "gam" to fit the combining data set
+combPred <- predict(combModFit,predDF) #use the gam model to predict the combining data set
+```
+
+
+__ Testing errors __
+
+```{r ,dependson="combine"}
+sqrt(sum((pred1-testing$wage)^2))
+sqrt(sum((pred2-testing$wage)^2))
+sqrt(sum((combPred-testing$wage)^2))
+```
+
+
+---
+
+__ Predict on validation data set : For cross validation __
+
+```{r validation,dependson="combine"}
+pred1V <- predict(mod1,validation); pred2V <- predict(mod2,validation)
+predVDF <- data.frame(pred1=pred1V,pred2=pred2V)
+combPredV <- predict(combModFit,predVDF)
+```
+
+
+---
+
+__ Evaluate on validation __
+
+```{r ,dependson="validation"}
+sqrt(sum((pred1V-validation$wage)^2))
+sqrt(sum((pred2V-validation$wage)^2))
+sqrt(sum((combPredV-validation$wage)^2)) # the error is lower. Legit.
+```
+
+---
+
+
+
