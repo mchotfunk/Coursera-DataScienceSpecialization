@@ -5,8 +5,8 @@ account: mchotfunk
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 400879
-bundleId: 1537486
+bundleId: 1537495
 url: https://mchotfunk.shinyapps.io/FinalProject/
-when: 1534395677.52369
+when: 1534396608.87781
 asMultiple: FALSE
 asStatic: FALSE
