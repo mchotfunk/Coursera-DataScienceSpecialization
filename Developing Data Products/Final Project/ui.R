@@ -5,6 +5,9 @@
 # library(rsconnect)
 # deployApp()
 # APP URL: https://voitel.shinyapps.io/shiny_app/
+library(rsconnect)
+library(datasets)
+library(dplyr)
 
 suppressWarnings(library(shiny))
 suppressWarnings(attach(airquality))
@@ -12,7 +15,7 @@ suppressWarnings(attach(airquality))
 shinyUI(fluidPage(
         
         # Application title
-        titlePanel("Predict emissions of Ozone from different predictors"),
+        titlePanel("Predict Emissions of Ozone within New York State"),
         
         sidebarLayout(
                 sidebarPanel(

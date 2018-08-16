@@ -1,0 +1,50 @@
+---
+title: "Predict Emissions of Ozone within New York State"
+author: "Andrew Abisha Hu"
+date: "8/15/2018"
+output: ioslides_presentation
+---
+## Introduction:
+
+- The data were obtained from the New York State Department of Conservation (ozone data) and the National Weather Service (meteorological data). It is Daily readings of the following air quality values for May 1, 1973 (a Tuesday) to September 30, 1973.
+
+- The purpose of this Shiny app is to predict Ozone given different predictors, including *Solar Radiation (Solar.R)*, *Wind Speed (Wind)* and *Temperature (Temp)*. You can input different predictors to see the model fit and predict a 95% level interval.
+
+## Model Fit: Simple Linear Regression
+
+*Example:*
+```{r, echo=F}
+library(datasets)
+data(airquality)
+fit <- lm(Ozone~Solar.R, data= airquality)
+summary(fit)
+```
+
+
+## Regression Plot:
+
+```{r,echo=F,fig.align='center'}
+ggreg <- function (fit) {
+        
+        require(ggplot2)
+        
+        ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) + 
+                geom_point() +
+                stat_smooth(method = "lm", col = "red") +
+                labs(title = paste("Adj R2 = ",signif(summary(fit)$adj.r.squared, 5),
+                                   "Intercept =",signif(fit$coef[[1]],5 ),
+                                   " Slope =",signif(fit$coef[[2]], 5),
+                                   " P =",signif(summary(fit)$coef[2,4], 5)))
+}
+
+ggreg(fit)
+```
+
+## Links:
+To run the **Shiny App**, click the link below:
+[ShinyApp]https://mchotfunk.shinyapps.io/FinalProject/
+
+Check my **Github**, containing all the notes and projects from *DataScience Specialization*, Coursera:
+[GitHub]https://github.com/mchotfunk
+
+

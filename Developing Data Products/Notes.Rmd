@@ -43,3 +43,46 @@ plot(mtcars$wt, mtcars$mpg, xlab= "weight", ylab="MPG")
 
 #### A second level subheading
 
+## My first map
+
+```{r, echo=F}
+library(leaflet)
+my_map <- leaflet() %>% 
+        addTiles()
+my_map
+```
+
+## Add Markers
+
+```{r, echo=FALSE}
+library(leaflet)
+my_map <- my_map %>%
+  addMarkers(lat=39.2980803, lng=-76.5898801, 
+             popup="Jeff Leek's Office")
+my_map
+```
+
+
+## Adding Many Markers
+
+```{r, echo=FALSE}
+set.seed(2016-04-25)
+df <- data.frame(lat = runif(20, min = 39.2, max = 39.3),
+                 lng = runif(20, min = -76.6, max = -76.5))
+df %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers()
+```
+
+
+## Mapping clusters: too close? No problem
+
+```{r, eval=FALSE}
+df <- data.frame(lat = runif(500, min = 39.25, max = 39.35),
+                 lng = runif(500, min = -76.65, max = -76.55))
+df %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+```

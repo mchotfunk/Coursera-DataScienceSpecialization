@@ -1,0 +1,12 @@
+name: FinalProject
+title: FinalProject
+username:
+account: mchotfunk
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 400879
+bundleId: 1537486
+url: https://mchotfunk.shinyapps.io/FinalProject/
+when: 1534395677.52369
+asMultiple: FALSE
+asStatic: FALSE

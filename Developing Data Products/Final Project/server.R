@@ -4,10 +4,12 @@
 #
 # http://shiny.rstudio.com
 #
-
+library(rsconnect)
 library(shiny)
 library(ggplot2)
 attach(airquality)
+library(datasets)
+library(dplyr)
 
 fit.lm.so <- lm(Ozone ~ Solar.R)
 fit.lm.wi <- lm(Ozone~ Wind)

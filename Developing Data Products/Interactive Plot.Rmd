@@ -1,0 +1,15 @@
+---
+title: "Fancy Plot"
+author: "Andrew Abisha Hu"
+date: "8/15/2018"
+output: ioslides_presentation
+---
+
+## This is a 3D interactive plot created by plotly:
+```{r, echo=F, message=F,warning=F}
+library(plotly)
+library(datasets)
+data("airquality")
+plot_ly(airquality, x = ~Solar.R, y = ~Ozone, type = "scatter", 
+        color = ~factor(Month), size = ~Wind)
+```

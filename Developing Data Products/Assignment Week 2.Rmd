@@ -1,0 +1,19 @@
+---
+title: "Interactive Map"
+author: "Andrew Abisha Hu"
+date: "8/15/2018"
+output: html_document
+---
+
+##my new slide
+** I don't even know where it is **
+```{r, eval=FALSE}
+library(leaflet)
+df <- data.frame(lat = runif(500, min = 40.25, max = 41.25),
+                 lng = runif(500, min = -75.65, max = -74.55))
+df %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+```
+

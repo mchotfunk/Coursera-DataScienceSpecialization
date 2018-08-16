@@ -1,0 +1,12 @@
+name: FinalProject_DataProducts
+title: FinalProject_DataProducts
+username:
+account: mchotfunk
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 400877
+bundleId: 1537459
+url: https://mchotfunk.shinyapps.io/FinalProject_DataProducts/
+when: 1534393564.05403
+asMultiple: FALSE
+asStatic: FALSE
