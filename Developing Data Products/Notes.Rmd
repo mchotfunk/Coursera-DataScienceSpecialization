@@ -1,0 +1,45 @@
+---
+title: "Presentation Notes"
+author: "Andrew Abisha Hu"
+date: "8/15/2018"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## my new slide
+
+Plain text
+
+*italicized text*
+
+**Bold**
+
+` this is for code demo for ( i %in% 1:10) `
+
+```{r, comment=""}
+head(mtcars)
+```
+
+## my second new slide
+
+** Add a plot without presenting the code **
+
+```{r, echo=F, fig.align='center', fig.cap="My FIGURE"}
+plot(mtcars$wt, mtcars$mpg, xlab= "weight", ylab="MPG")
+```
+
+## my title
+
+- Bullet one
+- Bullet 2
+
+1. item a
+2. item b
+
+### A top level subheading
+
+#### A second level subheading
+
