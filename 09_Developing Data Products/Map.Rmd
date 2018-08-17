@@ -2,7 +2,7 @@
 title: "Interactive Map"
 author: "Andrew Abisha Hu"
 date: "8/15/2018"
-output: ioslides_presentation
+output: html_document
 ---
 
 ##Interactive map created by leaflet
