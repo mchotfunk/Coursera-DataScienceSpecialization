@@ -1,60 +1,84 @@
 ---
-title: "R_Programming Assgn1"
-output: html_document
+title: "R_Programming Project 1"
+author: "Andrew Abisha Hu"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## **Introduction**:
 
-The point of this assignment is to know how to do a simple for loop, combining all the files into a same file, subsetting the data with conditions you wish, and then return the results.
+For this first programming assignment you will write three functions that are meant to interact with dataset that accompanies this assignment. The dataset is contained in a zip file specdata.zip that you can download from the Coursera web site.
 
+The zip file contains 332 comma-separated-value (CSV) files containing pollution monitoring data for fine particulate matter (PM) air pollution at 332 locations in the United States. Each file contains data from a single monitor and the ID number for each monitor is contained in the file name. For example, data for monitor 200 is contained in the file "200.csv". Each file contains three variables:
 
+Date: the date of the observation in YYYY-MM-DD format (year-month-day)
 
+sulfate: the level of sulfate PM in the air on that date (measured in micrograms per cubic meter)
+
+nitrate: the level of nitrate PM in the air on that date (measured in micrograms per cubic meter)
+
+## **Key takeaways:**
+
+The point of this assignment is to know how to do a **simple "for loop""**, **combine all the files into a same file**, **subset the data with conditions**, and then return the results.
+
+One of the key step is to create a blank vector first, and then use the "for-loop" to duplicate numeric values into that blank vector
+
+Here is a practice:
 ```{r  part1}
-
-library(data.table)
-
-#Example: Create a blank vector, and duplicate it.
-
 nums <- c(2,4,6,8)
-dup <- numeric() #the blank one
-for (num in nums) {
-        dup<- c(dup,nums) #the new dup=  blank dup + nums
+dup <- numeric() 
+
+dup #the blank one, nothing is in there yet.
+
+for (i in nums) {
+        dup<- c(dup,nums) #the new dup=  the original "blank "dup + nums
         
 }
 
+dup # now it contains c(2,4,6,8) * 4 times!
+```
 
+## **Part 1:**
+
+Write a function named 'pollutantmean' that calculates the mean of a pollutant (sulfate or nitrate) across a specified list of monitors. The function 'pollutantmean' takes three arguments: 'directory', 'pollutant', and 'id'. Given a vector monitor ID numbers, 'pollutantmean' reads that monitors' particulate matter data from the directory specified in the 'directory' argument and returns the mean of the pollutant across all of the monitors, ignoring any missing values coded as NA
+
+```{r}
 #part 1
-
+setwd("/Users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/02_RProgramming")
 pollutantmean <- function(directory, pollutant, id= 1:332) {
         
         filelist<- list.files(path=directory, pattern= ".csv", full.names=TRUE)#Read the list of files, indicating full route ( full.names)
-        values<- numeric() #Create a blank numeric vector, create before the for loop
+       
+         values<- numeric() #Create a blank numeric vector, before the for-loop
         
         for (i in id){
         data<-read.csv(filelist[i]) # read the filelist
-        values <- c(values, data[[pollutant]])   # add the value into the blank vector you created before, use double [] to locate the var  
+        values <- c(values, data[[pollutant]])   # add the value into the blank vector you created before, use double [] to locate the variable  
         }
-        mean(values,na.rm=TRUE)
+        mean(values,na.rm=TRUE) #return the mean of the values
         
 }
 
-pollutantmean("/users/andrewhu/desktop/Coursera/specdata","sulfate")
+pollutantmean("specdata","sulfate")
 pollutantmean("specdata", "sulfate", 1:10)
 pollutantmean("specdata", "nitrate", 70:72)
 pollutantmean("specdata", "sulfate", 34)
 pollutantmean("specdata", "nitrate")
 ```
 
+## **Part 2**
+
+Write a function that reads a directory full of files and reports the number of completely observed cases in each data file. The function should return a data frame where the first column is the name of the file and the second column is the number of complete cases
+
 ```{r  part2}
 
 #part2
 
-#Making examples
+#Practice: calculate the complete cases in a file.
 data<- read.csv("specdata/001.csv")
-#get the number of complete cases
 sum(complete.cases(data)) #117 complete cases in 001.csv
+
 
 #Checking the length of filelist
 filelist<- list.files(path="specdata", pattern=".csv",full.names = TRUE) 
@@ -64,16 +88,17 @@ length(filelist) # check to get all the files
 
 complete<- function(directory, id= 1:332) {
         filelist<-list.files(path=directory,pattern=".csv", full.names = TRUE) #list all the files 
-        nobs<- numeric() #create a empty vector
+        nobs<- numeric() #create an empty vector
         
         for (i in id) {
-        data<- read.csv(filelist[i])
+        data<- read.csv(filelist[i]) #data=read how many files (which file)
         nobs<- c(nobs,sum(complete.cases(data))) #add value into the original blank vector, nobs
              
         }
         nobs #return the nobs
         data.frame(id,nobs) #Create a simple df
 }
+
 complete("specdata",1:10)
 
 cc <- complete("specdata", c(6, 10, 20, 34, 100, 200, 310))
@@ -86,8 +111,11 @@ set.seed(42)
 cc <- complete("specdata", 332:1)
 use <- sample(332, 10)
 print(cc[use, "nobs"])
-
 ```
+
+## **Part 3**:
+
+Write a function that takes a directory of data files and a threshold for complete cases and calculates the correlation between sulfate and nitrate for monitor locations where the number of completely observed cases (on all variables) is greater than the threshold. The function should return a vector of correlations for the monitors that meet the threshold requirement. If no monitors meet the threshold requirement, then the function should return a numeric vector of length 0. A prototype of this function follows
 
 
 ```{r  part3}
@@ -98,14 +126,14 @@ corr<- function(directory, threshold=0) {
         dat<- numeric() # blank numeric vector
         
         for (i in 1:length(filelist)) {
-        temp<- read.csv(filelist[i]) #reading files
+        temp<- read.csv(filelist[i]) #reading files ~ xth file
         temp<- temp[complete.cases(temp),] #subsetting complete cases
         nrow<- nrow(temp) #counting the rows
         if (nrow > threshold) {
         dat<- c(dat, cor(temp$sulfate,temp$nitrate))    } #if nrow> threshold then return the correlation   
                 
         }
-        dat
+        dat # return the result
 }
 
 cr <- corr("specdata")                
