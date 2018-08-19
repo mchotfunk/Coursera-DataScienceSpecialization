@@ -58,7 +58,7 @@ message \invalid outcome".
 library(dplyr)
 best <- function(state, outcome) {
         ## Read outcome data
-        data <- read.csv("outcome-of-care-measures.csv",colClasses = "character") 
+        data <- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/02_RProgramming/oocm.csv",colClasses = "character") 
         
         data<- select(data,c(2,7,11,17,23)) #subset for hospital, state, heart attack, heart failure and pneumonia
         colnames(data) <- c("hospital", "state", "heart attack", "heart failure", "pneumonia") #naming the columns
@@ -114,7 +114,7 @@ the exact message \invalid outcome".
 library(dplyr)
 rankhospital <- function(state, outcome, rank) {
         ## Read outcome data
-        data <- read.csv("outcome-of-care-measures.csv",colClasses = "character") 
+        data <- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/02_RProgramming/oocm.csv",colClasses = "character") 
         
         data<- select(data,c(2,7,11,17,23)) #subset for hospital, state, heart attack, heart failure and pneumonia
         colnames(data) <- c("hospital", "state", "heart attack", "heart failure", "pneumonia")
@@ -190,7 +190,7 @@ rankall <- function(outcome, num = "best") {
         
         outcome= "heart attack"
         ## Read outcome data
-        data <- read.csv("outcome-of-care-measures.csv",colClasses = "character") 
+        data <- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/02_RProgramming/oocm.csv",colClasses = "character") 
         
         data<- select(data,c(2,7,11,17,23))
         colnames(data)<- c("hospital", "state", "heart attack", "heart failure", "pneumonia")
