@@ -1,28 +1,27 @@
 ---
 title: "R Programming Week2"
 output: html_document
+author: Andrew Abisha Hu
 ---
+**Objectives:**
+
+1. Write an if-else expression
+
+2. Write a for loop, a while loop, and a repeat loop
+
+3. Define a function in R and specify its return value [see Functions Part 1 and Part 2]
+
+4. Describe how R binds a value to a symbol via the search list
+
+5. Define what lexical scoping is with respect to how the value of free variables are resolved in R
+
+6. Describe the difference between lexical scoping and dynamic scoping rules
+
+7. Convert a character string representing a date/time into an R datetime object. [see Dates and Times]
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-Objectives:
-
-Write an if-else expression
-Write a for loop, a while loop, and a repeat loop
-Define a function in R and specify its return value [see Functions Part 1 and Part 2]
-Describe how R binds a value to a symbol via the search list
-Define what lexical scoping is with respect to how the value of free variables are resolved in R
-Describe the difference between lexical scoping and dynamic scoping rules
-Convert a character string representing a date/time into an R datetime object. [see Dates and Times]
-
+## **For-loops:**
 ```{r}
-
-#For loops 
-
-
 x<- c("a","b","c","d")
 
 for (i in 1:4) { print(x[i])}
@@ -42,19 +41,11 @@ for( i in seq_len(nrow(x))) {
                 
         }
 }
-
-#While
-#be careful when to end  
-
 ```
 
-First function
-
+## **First function practice**
 ```{r}
 #First function
-
-
-#above10
 
 above10 <- function(x){
         use<- x>10 
@@ -85,8 +76,10 @@ columnmean<- function(y, removeNA= TRUE) {
 #The "... argument in the functions indicates the pass along to other functions. will address more in the future
 
 
+```
 
-#Lexical Scoping ######
+## Lexical Scoping
+```{r lexical}
 make.power<- function(n){
         pow <- function(x) {
                 x^n
@@ -106,8 +99,6 @@ square(3)
 ls(environment(cube))
 get("n",environment(cube))
 
-
-
 #Dates
 x<- as.Date("2012-01-01")
 y<- strptime("9 Jan 2011 11:34:21", "%d %b %Y %M:%S")
@@ -118,14 +109,9 @@ x-y
 x<- as.POSIXlt(x)
 x
 x-y
-
-
 ```
 
-Swirl Practice
-
-Logical operator
-
+**Swirl Practice: Logical operator**
 ```{r}
 # & evaluates all
 # && evaluate the first member of a vector (operand)
@@ -140,7 +126,6 @@ TRUE | c(TRUE, FALSE, FALSE)
 #First, the && is evaluated, is true
 #Then, 5<8 is false, so now is FALSE || TRUE
 # || only evaluates the first element of the right operand, hence, it is true.
-
 
 
 #isTRUE
@@ -164,16 +149,16 @@ which(ints>7)
 
 
 
-Swirl practice: Functions
+**Swirl practice: Functions**
 ```{r}
 
 # %% : Return the remainder
-
 remainder <- function(num, divisor=2) {
  num %% divisor
         
 }
 
+remainder(5)
 # See function's arguments:
 
 args(remainder)
@@ -184,11 +169,10 @@ telegram <- function(...){
         paste("START",...,"STOP")
   
 }
-
 ```
 
 
-Data frame
+**Create Matrix**
 ```{r}
 
 #Create Matrix
@@ -201,7 +185,10 @@ my_matrix<- matrix(1:9,byrow=TRUE,ncol=5) #byrow= filled by the rows
 patients<- c("Bill","Gina","Kelly","Sean")
 cbind(patients,my_matrix2) #Note: the numbers will become "" because matrix can only have one type of data
 
+```
 
+**Create data frame**
+```{r}
 #Data frame: can have different kinds of data
 
 my_data<- data.frame(patients,my_matrix2)
@@ -213,12 +200,6 @@ cnames<-c("patient","age","weight","bp","rating","test")
 colnames(my_data)<-cnames
 
 #Same, use rownames to create for rows
-
-
-
-
-
-
 ```
 
 

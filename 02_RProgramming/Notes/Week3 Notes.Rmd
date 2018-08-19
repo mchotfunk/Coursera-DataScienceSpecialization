@@ -1,0 +1,88 @@
+---
+title: "R_Programming_Week3"
+output: html_document
+author: Andrew Abisha Hu
+---
+## **Apply**
+
+`apply` is used to a evaluate a function (often an anonymous one) over the margins of an array.
+
+- It is most often used to apply a function to the rows or columns of a matrix
+
+- It can be used with general arrays, e.g. taking the average of an array of matrices 
+
+```r
+> str(apply)
+function (X, MARGIN, FUN, ...)
+```
+
+- `X` is an array
+- `MARGIN` is an integer vector indicating which margins should be “retained”. 
+- `FUN` is a function to be applied
+- ... is for other arguments to be passed to `FUN`
+
+- `rowSums` = `apply(x, 1, sum)`
+- `rowMeans` = `apply(x, 1, mean)`
+- `colSums` = `apply(x, 2, sum)`
+- `colMeans` = `apply(x, 2, mean)`
+
+## Looping on the Command Line
+
+Writing for, while loops is useful when programming but not particularly easy when working interactively on the command line. There are some functions which implement looping to make life easier.
+
+- `lapply`: Loop over a list and evaluate a function on each element 
+
+- `sapply`: Same as `lapply` but try to simplify the result
+
+- `apply`: Apply a function over the margins of an array
+
+- `tapply`: Apply a function over subsets of a vector
+
+- `mapply`: Multivariate version of `lapply`
+
+An auxiliary function `split` is also useful, particularly in conjunction with `lapply`.
+
+```{r }
+#Apply (Margin 1 indicates row, 2 is cols)
+library(datasets)
+apply(iris[, 1:4], 2, mean)
+
+#mapply: apply functions to multiple vector
+str(mapply)
+
+#tapply: apply functions to subset of a vector
+str(tapply) #index is a factor, or a list of factor
+data("mtcars")
+
+#How can one calculate the average miles per gallon (mpg) by number of cylinders in the car (cyl)?
+
+tapply(mtcars$mpg,mtcars$cyl,mean)
+
+#split takes a vector or other objects and splits it into groups
+str(split) #x= vector or df, f= factor or list of factor, drop= empty factors levels should be dropped?
+
+x<- c(rnorm(10),runif(10),rnorm(10,1))
+f<- gl(3,10)
+split(x,f)
+
+#combine with lapply (the same with using just tapply)
+lapply(split(x,f),mean)
+tapply(x,f,mean)
+
+#examples
+library(datasets)
+head(airquality)
+
+#split the data into monthly basis
+
+s<- split(airquality,airquality$Month)
+
+#applying with anonymous functions
+lapply(s,function(x) colMeans(x[, c("Ozone","Solar.R","Wind")]))
+
+sapply(s,function(x) colMeans(x[,c("Ozone","Solar.R","Wind")]))
+
+sapply(s,function(x) colMeans(x[,c("Ozone","Solar.R","Wind")],na.rm=TRUE))
+```
+
+
