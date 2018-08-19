@@ -4,6 +4,12 @@ output: html_document
 author: Andrew Abisha Hu
 ---
 ## **Contents:**
+| Week1  | 1. Read XML file
+2. Read HTML file
+3. Read json file
+4. data.table (an alternative to create data frame) |
+
+
 
 1. Read XML file
 2. Read HTML file
