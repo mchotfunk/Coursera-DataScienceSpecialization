@@ -1,0 +1,416 @@
+---
+title: "R-Programming Notes"
+author: "Andrew Abisha Hu"
+date: "8/18/2018"
+output: html_document
+---
+## **Table of content**
+
+* **Week1**
+
+        * Assign values
+        
+        * Subset with conditions
+        
+        * Check missing values
+
+* **Week2**
+
+        * Write an if-else expression
+
+        * Write a for loop, a while loop, and a repeat loop
+
+        * Define a function in R and specify its return value [see Functions Part 1 and Part 2]
+
+        * Describe how R binds a value to a symbol via the search list
+
+        * Define what lexical scoping is with respect to how the value of free variables are resolved in R
+
+        * Describe the difference between lexical scoping and dynamic scoping rules
+
+        * Convert a character string representing a date/time into an R datetime object. [see Dates and Times]
+
+* **Week3** 
+
+        * apply
+        
+        * tapply
+        
+        * sapply
+        
+        * lapply
+        
+        * mapply
+        
+* **Week4**
+
+        * Generate random numbers
+        
+---
+
+## Reading url:
+```{r }
+Con <-url("http://www.jhsph.edu" ,"r" )
+Con
+x<- readLines(Con)
+head(x)
+```
+
+## Subsetting:
+```{r }
+# double braket can be used for computed index
+
+x<- list(foo=1:4, bar=0.6, baz= "hello")
+x$bar
+x$foo
+name <- "foo"
+x[[name]]
+
+x<- list(a= list(10,12,14), b=c(3.14,2.81))
+x[[c(1,3)]]
+
+x[[c(2,1)]]
+
+x<- matrix(1:6, 2,3 )
+
+x[1,2]
+x[1,]
+x[,2]
+
+#Return the matrix
+x[1,2,drop=F]
+x[2, ,drop=F]
+
+#Partial matching
+x<- list(adjdofjodaif= 1:5)
+x$a
+x[["a"]]
+x[["a", exact=F]]
+
+#Removing NA values
+x<- c(1,2,3,NA,NA,5)
+bad<- is.na(x) #create a logical vector
+x[!bad]
+
+#choosing non NA values
+y<- c("a", "b","c", NA, NA,"d")
+
+good<- complete.cases(x,y)
+x[good]
+y[good]
+```
+
+
+## Logical:
+```{r}
+#Double equal sign tests the equality 
+x <- c(17, 14, 4, 5, 13, 12, 10)
+x[x > 10]<- 4
+x[x == 10] <-4
+x
+#Multiple conditions subsetting
+ex<- hw1[hw1$Ozone>31 & hw1$Temp>90, ]
+summary(hw1[hw1$Month==5,])
+```
+
+## **For-loops:**
+```{r}
+x<- c("a","b","c","d")
+
+for (i in 1:4) { print(x[i])}
+
+for ( i in seq_along(x)) { print(x[i])}
+
+for (letter in x) {print(letter)}
+
+# Nested for loops 
+
+x<- matrix(1:6, 2, 3)
+
+for( i in seq_len(nrow(x))) { 
+        
+        for (j in seq_len(ncol(x)))
+        { print(x[i,j])
+                
+        }
+}
+```
+
+## **First function practice**
+```{r}
+#First function
+
+above10 <- function(x){
+        use<- x>10 
+        x[use]
+        
+}
+
+above<- function(x,n=10){
+        use<- x>n
+        x[use]
+        
+}
+
+#Matrix column mean
+columnmean<- function(y, removeNA= TRUE) {
+        nc<- ncol(y)
+        means<- numeric(nc)
+        for (i in 1:nc) { 
+                means[i]<- mean(y[,i], na.rm=removeNA )}
+        means
+        
+}
+
+#Functions Part I
+
+#Argument Matching
+
+#The "... argument in the functions indicates the pass along to other functions. will address more in the future
+
+
+```
+
+## Lexical Scoping
+```{r lexical}
+make.power<- function(n){
+        pow <- function(x) {
+                x^n
+        }
+        pow
+}
+
+cube<- make.power(3)#only specify n, does not specify x.
+cube 
+cube(3)# the 3 here is specifying x
+
+square<- make.power(2)
+square(3)
+
+#Looking for functions' environment
+
+ls(environment(cube))
+get("n",environment(cube))
+
+#Dates
+x<- as.Date("2012-01-01")
+y<- strptime("9 Jan 2011 11:34:21", "%d %b %Y %M:%S")
+x
+y
+x-y
+
+x<- as.POSIXlt(x)
+x
+x-y
+```
+
+## **Swirl Practice: Logical operator**
+```{r}
+# & evaluates all
+# && evaluate the first member of a vector (operand)
+
+
+# | is "or" , evaluates the whole vector (operand)
+# same logic, || only evaluates the first member of a right operand
+TRUE | c(TRUE, FALSE, FALSE)
+
+
+5 > 8 || 6 != 8 && 4 > 3.9
+#First, the && is evaluated, is true
+#Then, 5<8 is false, so now is FALSE || TRUE
+# || only evaluates the first element of the right operand, hence, it is true.
+
+
+#isTRUE
+isTRUE(6>4)
+
+#identical()
+
+#xor() : Stands for the exclusive "OR"
+#If there is a or, then it will be TRUE.
+#If there is not a or (two arguments are the same), then will be FALSE
+
+xor( 5==6, !FALSE) # (FALSE,TRUE) ==> TRUE
+
+#which() : return the location of the true value 
+ints <- sample(10)
+which(ints>7)
+
+#any() : return Ture if one or more of the elements are true
+#all(): if all of the elements are true
+```
+
+
+
+**Swirl practice: Functions**
+```{r}
+
+# %% : Return the remainder
+remainder <- function(num, divisor=2) {
+ num %% divisor
+        
+}
+
+remainder(5)
+# See function's arguments:
+
+args(remainder)
+
+#Paste: concatenate
+
+telegram <- function(...){
+        paste("START",...,"STOP")
+  
+}
+```
+
+
+**Create Matrix**
+```{r}
+
+#Create Matrix
+
+my_matrix2<- matrix(1:20,nrow=4, ncol=5)
+my_matrix<- matrix(1:9,byrow=TRUE,ncol=5) #byrow= filled by the rows
+
+#Cbind: combine column ( add a column)
+
+patients<- c("Bill","Gina","Kelly","Sean")
+cbind(patients,my_matrix2) #Note: the numbers will become "" because matrix can only have one type of data
+
+```
+
+**Create data frame**
+```{r}
+#Data frame: can have different kinds of data
+
+my_data<- data.frame(patients,my_matrix2)
+
+#Create names for columns
+
+cnames<-c("patient","age","weight","bp","rating","test")
+
+colnames(my_data)<-cnames
+
+#Same, use rownames to create for rows
+```
+
+---
+
+## **Apply**
+
+`apply` is used to a evaluate a function (often an anonymous one) over the margins of an array.
+
+- It is most often used to apply a function to the rows or columns of a matrix
+
+- It can be used with general arrays, e.g. taking the average of an array of matrices 
+
+```r
+> str(apply)
+function (X, MARGIN, FUN, ...)
+```
+
+- `X` is an array
+- `MARGIN` is an integer vector indicating which margins should be “retained”. 
+- `FUN` is a function to be applied
+- ... is for other arguments to be passed to `FUN`
+
+- `rowSums` = `apply(x, 1, sum)`
+- `rowMeans` = `apply(x, 1, mean)`
+- `colSums` = `apply(x, 2, sum)`
+- `colMeans` = `apply(x, 2, mean)`
+
+## Looping on the Command Line
+
+Writing for, while loops is useful when programming but not particularly easy when working interactively on the command line. There are some functions which implement looping to make life easier.
+
+- `lapply`: Loop over a list and evaluate a function on each element 
+
+- `sapply`: Same as `lapply` but try to simplify the result
+
+- `apply`: Apply a function over the margins of an array
+
+- `tapply`: Apply a function over subsets of a vector
+
+- `mapply`: Multivariate version of `lapply`
+
+An auxiliary function `split` is also useful, particularly in conjunction with `lapply`.
+
+```{r }
+#Apply (Margin 1 indicates row, 2 is cols)
+library(datasets)
+apply(iris[, 1:4], 2, mean)
+
+#mapply: apply functions to multiple vector
+str(mapply)
+
+#tapply: apply functions to subset of a vector
+str(tapply) #index is a factor, or a list of factor
+data("mtcars")
+
+#How can one calculate the average miles per gallon (mpg) by number of cylinders in the car (cyl)?
+
+tapply(mtcars$mpg,mtcars$cyl,mean)
+
+#split takes a vector or other objects and splits it into groups
+str(split) #x= vector or df, f= factor or list of factor, drop= empty factors levels should be dropped?
+
+x<- c(rnorm(10),runif(10),rnorm(10,1))
+f<- gl(3,10)
+split(x,f)
+
+#combine with lapply (the same with using just tapply)
+lapply(split(x,f),mean)
+tapply(x,f,mean)
+
+#examples
+library(datasets)
+head(airquality)
+
+#split the data into monthly basis
+
+s<- split(airquality,airquality$Month)
+
+#applying with anonymous functions
+lapply(s,function(x) colMeans(x[, c("Ozone","Solar.R","Wind")]))
+
+sapply(s,function(x) colMeans(x[,c("Ozone","Solar.R","Wind")]))
+
+sapply(s,function(x) colMeans(x[,c("Ozone","Solar.R","Wind")],na.rm=TRUE))
+```
+
+
+---
+
+## Generating Random Numbers
+
+Functions for probability distributions in R
+- `rnorm`: generate random Normal variates with a given mean and standard deviation
+- `dnorm`: evaluate the Normal probability density (with a given mean/SD) at a point (or vector of points)
+- `pnorm`: evaluate the cumulative distribution function for a Normal distribution 
+- `rpois`: generate random Poisson variates with a given rate
+
+---
+
+Probability distribution functions usually have four functions associated with them. The functions are prefixed with a
+- `d` for density
+- `r` for random number generation 
+- `p` for cumulative distribution
+- `q` for quantile function
+
+## Simulating data in r:
+```{r}
+x<- rnorm(n, mean = 0, sd = 1)
+x<- dnorm(x, mean = 0, sd = 1, log = FALSE)
+```
+
+
+## Simulating data from a linear model:
+```{r}
+set.seed(20)
+x <- rnorm(100)
+e <- rnorm(100, 0, 2)
+y <- 0.5 + 2 * x + e
+summary(y)
+```
+
