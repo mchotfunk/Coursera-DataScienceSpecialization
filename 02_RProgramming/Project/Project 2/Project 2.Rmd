@@ -61,14 +61,14 @@ best <- function(state, outcome) {
         data <- read.csv("outcome-of-care-measures.csv",colClasses = "character") 
         
         data<- select(data,c(2,7,11,17,23)) #subset for hospital, state, heart attack, heart failure and pneumonia
-        colnames(data) <- c("hospital", "state", "heart attack", "heart failure", "pneumonia")
+        colnames(data) <- c("hospital", "state", "heart attack", "heart failure", "pneumonia") #naming the columns
         
         # Check that state and outcome are valid
         if (!state %in% data[ ,"state"]){ stop('invalid state')}
         else if (!outcome %in% c("heart attack", "heart failure", "pneumonia")) {stop('invalid outcome')} #for invalid
         else {
-        state_logical <- which(data[, "state"] == state)
-        df_state <- data[state_logical, ]    # subset data for having state
+        state_logical <- which(data[, "state"] == state) #Create logical indicator for having state
+        df_state <- data[state_logical, ]    # subset data for having state using the logical factor
         ot <- as.numeric(df_state[, eval(outcome)])#turn the outcome into numeric
         min_eval <- min(ot, na.rm = TRUE) #assign the min value
         result  <- df_state[, "hospital"][which(ot == min_eval)]
@@ -199,7 +199,7 @@ rankall <- function(outcome, num = "best") {
         
         
         if (!outcome %in% disease ) {stop ("invalid outcome")}
-        
+        ##subsetting data
         if (outcome == "heart attack") {
                 data<- data[c("hospital", "state", "heart attack")]
         }
@@ -210,17 +210,15 @@ rankall <- function(outcome, num = "best") {
                 data<- data[c("hospital","state", "pneumonia")]
         }
         
-       colnames(data)[3] <- "disease.rate"
+       colnames(data)[3] <- "disease.rate" #assign a simple name for column 3
 
-        data$disease.rate <-as.numeric(as.character(data$disease.rate))
+        data$disease.rate <-as.numeric(as.character(data$disease.rate)) 
         
-data$hospital<- as.character(data$hospital)
-        
-        #transform for order using
+        data$hospital<- as.character(data$hospital) #transform for order using
     
         State_list <- as.character((data$state)) 
         
-        State_list <- State_list[order(State_list)] 
+        State_list <- State_list[order(State_list)] #order by state name
         
         final_df <- data.frame() #create a blank df first
         
@@ -247,15 +245,13 @@ data$hospital<- as.character(data$hospital)
 }
         
 rankall("heart attack", "best")       
-
 ```
-** Reference**
 
-![]https://rpubs.com/fhlgood/rw3a3
-
-![]https://xmuxiaomo.github.io/2015/06/19/R-Programming-Assignment-3/
+## ** Reference**
 
 ![]https://github.com/DanieleP/PA3-tutorial
+
+![]https://rpubs.com/fhlgood/rw3a3
 
 ![]https://www.cnblogs.com/yifeili/p/5437384.html
 

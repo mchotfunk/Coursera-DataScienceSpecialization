@@ -1,17 +1,26 @@
 ---
-title: "Coursera_Cleaning Data_ Week3"
+title: "Getting and Cleaning data-Week3"
+author: Andrew Abisha Hu
 output:
   pdf_document: default
   html_document: default
 ---
-Subsetting and sorting 
+
+## **Content:**
+1. Subsetting and sorting data
+2. Making tables
+3. Checking missing values
+4. Creating new variables
+5. Manipulating data: dplyr
+6. Merge data
+
+## **Subsetting and sorting**
 ```{r }
 #Warm up
 set.seed(13435)
 X<- data.frame("var1"= sample(1:5),"var2"= sample(6:10),"var3"= sample(11:15))
 X<- X[sample(1:5),] ; X$var2[c(1,3)]=NA
 X
-
 
 X[,1]
 X[,"var1"]
@@ -21,29 +30,22 @@ X[1:2, "var2"]
 
 #subset with logical 
 X[X$var1 <= 3 & X$var3 >11,]
-
-
 X[X$var1 <= 3 | X$var3 >15,]
 
 
-#Dealing with missing values: USe which
+#Dealing with missing values: Use which
 
 X[which(X$var2>8), ] #no  NA
 X[X$var2>8, ]# with NA
 
-#Sort
 
+#Sorting
 sort(X$var1)
-
 sort(X$var1,decreasing = TRUE)
-
 sort(X$var2,na.last = TRUE)
-
-
 X[order(X$var1),]
 
 #ordering with plyr
-
 library(plyr)
 
 arrange(X,var1)
@@ -51,18 +53,15 @@ arrange(X,desc(var1))
 
 
 #adding rows and cols
-
 X$var4 <- rnorm(5)
 X
 Y<- cbind(X, rnorm(5))
 Y
-
-
 ```
 
-Summarizing data 
+## **Summarizing data**
 ```{r}
-rest<- read.csv("/users/andrewhu/desktop/Coursera/Restaurants.csv")
+rest<- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/03_Getting and Cleaning Data/Data/rest.csv")
 #head(data)
 #tail(data)
 #str(data)
@@ -70,9 +69,8 @@ rest<- read.csv("/users/andrewhu/desktop/Coursera/Restaurants.csv")
 #quantile(data$var, probs=c(0.5,0.7,0.9))
 
 
-
 #make a table
-table(rest$zipCode, useNA="ifany") #not missing the NAs.
+table(rest$zipCode, useNA="ifany") #not missing the NAs (will include NAs)
 
 #two dimensional table
 table(rest$councilDistrict, rest$zipCode)
@@ -89,7 +87,6 @@ all(colSums(is.na(rest))==0)
 
 
 #finding values with specific characteristics
-
 table(rest$zipCode %in% c("21212","21213"))
 
 
@@ -101,7 +98,6 @@ rest[rest$zipCode %in% c("21212","21213"),]
 data(UCBAdmissions)
 DF= as.data.frame(UCBAdmissions)
 summary(DF)
-
 
 x1<- xtabs(Freq~Gender+Admit, data=DF)
 x1
@@ -116,7 +112,7 @@ ftable(xt)
 ```
 
 
-Creating new variables
+## **Creating new variables**
 ```{r}
 #Create sequences: need an index for data set
 s1<- seq(1,10,by=2) ; s1 #specify the interval
@@ -125,11 +121,10 @@ x<- c(1,3,8,25,100); seq(along=x) #create index for the 5 values in x
 
 #subsetting variables
 rest$nearme = rest$neighborhood %in% c("Roland Park", "Homeland")
-
 table(rest$nearme)
 
 #Create binary variables
-rest$zipWrong = ifelse(rest$zipCode<0, TRUE, FALSE)
+rest$zipWrong = ifelse(rest$zipCode<0, TRUE, FALSE) #if <0 then true, otherwise false.
 table(rest$zipWrong, rest$zipCode<0)
 
 
@@ -165,8 +160,6 @@ library(Hmisc); library(plyr)
 rest2 <- mutate(rest, zipGroups= cut2(zipCode,g=4))
 table(rest2$zipGroups)
 
-
-
 #common transforms
 
 #abs(x) absolute value
@@ -180,16 +173,13 @@ table(rest2$zipGroups)
 ```
 
 
-
-
-Data Reshaping: each var per col, each obs per row
+## **Data Reshaping**
 ```{r}
 library(reshape2)
 library(datasets)
 head(mtcars)
 
 #melt the dataset 
-
 mtcars$carname <- rownames(mtcars)
 carMelt <- melt(mtcars, id=c("carname","gear","cyl"), measure.vars=c("mpg","hp"))
 
@@ -198,7 +188,6 @@ tail(carMelt, n=3)
 
 
 #Casting data frames
-
 cylData <- dcast(carMelt, cyl~variable)# for cyl 4, there are 11 measurements for mpg..
 cylData
 
@@ -219,12 +208,12 @@ ddply(InsectSprays, .(spray),summarise, sum=sum(count))
 
 
 
-Intro to dplyr
+## **Intro to dplyr (IMPORTANT) **
 ```{r}
 #Introduction to dplyr
 
 library(dplyr)
-chicago<- readRDS("/users/andrewhu/desktop/Coursera/chicago.rds")
+chicago<- readRDS("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/03_Getting and Cleaning Data/Data/chicago.rds")
 dim(chicago)
 str(chicago)
 
@@ -240,7 +229,7 @@ head(select(chicago, -(city:dptp)))
 chic.f <- filter(chicago, pm25tmean2>30 & tmpd>80)
 head(chic.f)
 
-#arrange: re order
+#arrange: reorder
 chicago<- arrange(chicago,date)
 head(chicago)
 tail(chicago)
@@ -272,19 +261,16 @@ chicago<- mutate(chicago,year= as.POSIXlt(date)$year +1900)
 years<- group_by(chicago,year)
 summarize(years, pm25=mean(pm25,na.rm=TRUE), o3=max(o3tmean2), no2= median(no2tmean2))
 
-
-
 #Pipeline operator
 chicago %>% mutate(month = as.POSIXlt(date)$mon +1) %>% group_by(month) %>% summarize(pm25= mean(pm25, na.rm=TRUE), o3= max(o3tmean2), no2 = median(no2tmean2))
-
 ```
 
 
+## ** Merge **
 ```{r}
 #---------Merging data
-review<- read.csv("/users/andrewhu/desktop/reviews.csv")
-solu<- read.csv("/users/andrewhu/desktop/solutions.csv")
-
+review<- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/03_Getting and Cleaning Data/Data/reviews.csv")
+solu<- read.csv("/users/andrewhu/Documents/GitHub/Coursera-DataScienceSpecialization/03_Getting and Cleaning Data/Data/solutions.csv")
 
 head(review)
 head(solu)
@@ -310,11 +296,4 @@ df2 = data.frame(id=sample(1:10),y=rnorm(10))
 df3 = data.frame(id=sample(1:10),z=rnorm(10))
 dfList <- list(df1,df2,df3)
 join_all(dfList)
-
-
-
-
-
-
-
 ```

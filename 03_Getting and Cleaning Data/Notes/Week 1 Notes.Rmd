@@ -1,15 +1,17 @@
 ---
-title: "Coursera_Cleaning the data_Week1"
+title: "Getting and Cleaning data-Week1"
 output: html_document
+author: Andrew Abisha Hu
 ---
-XML
-Extensible markup language (getting data from Internet)
+## **Contents:**
 
-Compoenets:
--Markup
--Content
+1. Read XML file
+2. Read HTML file
+3. Read json file
+4. data.table (an alternative to create data frame)
 
-Read XML file
+
+## **Reading internet files (XML, HTML, json)**
 ```{r setup, include=FALSE}
 library(XML)
 library(RCurl)
@@ -41,8 +43,6 @@ teams <- xpathSApply(doc2,"//li[@class='team-name']", xmlValue)
 
 
 
-
-
 library(jsonlite)
 jsonData<- fromJSON("http://api.github.com/users/jtleek/repos")
 names(jsonData)
@@ -53,8 +53,11 @@ cat(myjson)
 
 iris2 <- fromJSON(myjson)
 head(iris2)
+```
 
 
+## **data.table**
+```{r}
 #Data.table
 
 #simply create a data table
@@ -94,18 +97,4 @@ housing <- data.table::fread ("https://d396qusza40orc.cloudfront.net/getdata%2Fd
 #How many is val = 24 
 
 housing[VAL==24, .N]
-
-
 ```
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

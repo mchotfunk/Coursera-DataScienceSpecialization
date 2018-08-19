@@ -1,9 +1,15 @@
 ---
-title: "Coursera_Cleaning Data_ Week2"
+title: "Getting and Cleaning data-Week2"
 output: html_document
+author: Andrew Abisha Hu
 ---
-Reading MySQL
+## **Content:** 
+1. Connect mySQL
+2. Reading HDF5
+3. Reading data from web
 
+
+**Reading MySQL**
 ```{r , include=FALSE}
 library(RMySQL)
 ucscDb<- dbConnect(MySQL(),user="genome",host="genome-mysql.cse.ucsc.edu")
@@ -36,7 +42,9 @@ affyMisSmall
 #close the connection
 dbDisconnect(hg19)
 ```
-Reading HDF5
+
+
+**Reading HDF5**
 ```{r , include=FALSE}
 source("http://bioconductor.org/biocLite.R")
 biocLite("rhdf5")
@@ -44,14 +52,9 @@ biocLite("rhdf5")
 library(rhdf5)
 created= h5createFile("example.h5")
 created
-
-
-
-
-
-
 ```
-Reading data from the web
+
+**Reading data from the web**
 ```{r , include=FALSE}
 #Read the url
 con = url("http://scholar.google.com/citations?users=HI-I6C0AAAAJ&hl=en")
@@ -74,10 +77,4 @@ content2 = content(html2,as ="text")
 parsedHtml = htmlParse(content2,asText= TRUE)
 xpathSApply(parsedHtml,"//title", xmlValue)
 
-
-
-
-
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

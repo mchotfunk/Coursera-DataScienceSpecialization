@@ -1,13 +1,15 @@
 ---
-title: "Getting and Cleaning Data_Week4"
+title: "Getting and Cleaning Data-Week4"
+author: Andrew Abisha Hu
 output: html_document
 ---
+## **Content:**
+1. Editing test variables
+2. Finding values in text (grasping pecific text content)
 
-```{r }
-#Week 4
-
+## Editing text:
+```{r}
 #Editing text var
-
 camera<- fread("cameras.csv")
 names(camera)
 
@@ -24,29 +26,31 @@ test<- "this_is_a_test"
 sub("_","",test)#only edit the first encounter
 gsub("_","",test)#edit all
 
+#paste0: leave no space
+paste0("Andrew","Hu")
+```
+
+## **Finding values in text**
+```{r}
 #Finding values in text
 grep("Alameda", camera$intersection) #tells you the location
 grep("Alameda", camera$intersection, value=TRUE) #return the value
 
 #Subsetting with the finding values
 camera2 <- camera[!grepl("Alameda",camera$intersection),]
+```
 
-#paste0: leave no space
+##Regular Expressions
+```
+$ represent for the end of a line
+morning$
+^ will start looking for the begining of the line
+```
 
-paste0("Andrew","Hu")
-
-
-
-#Regular Expressions
-
-# $ represent for the end of a line
-# morning$
-# ^ will start looking for the begining of the line
-
-#Creating dates
+## **Creating dates**
+```{r}
 x =c("1jan1960", "2jan1960","31mar1960","30jul1960"); z= as.Date(x, "%d%b%Y") #day, month, year
 z
 
 z[1]- z[2]
-
 ```

@@ -1,5 +1,6 @@
 ---
 title: "Week3_Quiz"
+author: Andrew Abisha Hu
 output: html_document
 ---
 
