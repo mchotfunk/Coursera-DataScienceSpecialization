@@ -6,7 +6,7 @@ author: Andrew Abisha Hu
 ## **Contents:**
 
 **Week1**
-> Read XML file
+> **Read XML file**
 
 > Read HTML file
 
