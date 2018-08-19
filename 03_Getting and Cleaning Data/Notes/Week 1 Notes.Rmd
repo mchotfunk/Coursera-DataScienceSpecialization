@@ -3,16 +3,16 @@ title: "Getting and Cleaning data-Week1"
 output: html_document
 author: Andrew Abisha Hu
 ---
-## Table of content
+## **Table of content**
 
-*Week1
-        *Read XML file
+* Week1
+        * Read XML file
 
-        *Read HTML file
+        * Read HTML file
 
-        *Read json file
-
-        *data.table (an alternative to create data frame)
+        * Read json file
+ 
+        * data.table (an alternative to create data frame)
 
 
 
