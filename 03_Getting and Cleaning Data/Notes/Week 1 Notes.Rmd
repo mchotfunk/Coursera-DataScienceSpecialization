@@ -3,9 +3,9 @@ title: "Getting and Cleaning data-Week1"
 output: html_document
 author: Andrew Abisha Hu
 ---
-## **Table of content:**
+## Table of content
 
-**Week1**
+*Week1
         *Read XML file
 
         *Read HTML file
