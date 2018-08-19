@@ -5,7 +5,7 @@ author: Andrew Abisha Hu
 ---
 ## **Table of content**
 
-* Week1
+* **Week1**
 
         * Read XML file
 
@@ -14,6 +14,12 @@ author: Andrew Abisha Hu
         * Read json file
  
         * data.table (an alternative to create data frame)
+        
+* **Week2**
+
+        * Connect mySQL
+        * Reading HDF5
+        * Reading data from web
 
 
 
