@@ -8,4 +8,4 @@ The content addressing in this class is very basic: Write a simple for-loop, int
 
 However, the projects (assignment) in this course are so much different —  it requires way more research online and nearly none of the required skills are covered in the lecture (that escalated quickly).
 
-To sum up, this course is poorly managed and if you are not familiar with R (at least intermediate level), you will be very frustrated and start doubting yourself. 
+To sum up, this course is **poorly managed** and if you are not familiar with R (at least intermediate level), you will be very frustrated and start doubting yourself. 
