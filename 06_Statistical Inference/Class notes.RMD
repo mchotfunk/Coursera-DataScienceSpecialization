@@ -1,8 +1,9 @@
 ---
 title: "Statistical Inference Notes.RMD"
 output: html_document
+author: Andrew Abisha Hu
 ---
-Note: A lot of the content are summarized from : ...
+Note: A lot of the content is summarized from ![]https://github.com/DataScienceSpecialization/courses
 
 
 # Introduction
