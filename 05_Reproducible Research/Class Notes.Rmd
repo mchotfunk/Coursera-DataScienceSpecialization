@@ -1,6 +1,7 @@
 ---
 title: "Reproducible Research Notes.RMD"
 output: html_document
+author: Andrew Abisha Hu
 ---
 RMD Demo
 ```{r ,echo=TRUE}
@@ -39,6 +40,7 @@ print(xt, type="html")
 
 
 ##Setting Global Options  
+
 Use : opts_chunk$set(echo= FALSE, results="hide")
 ```{r setoptions, echo=FALSE}
 opts_chunk$set(echo= FALSE, results="hide")
