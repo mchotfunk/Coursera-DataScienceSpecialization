@@ -2,9 +2,9 @@
 
 **Rating: 4 out of 5**
 
-This is the most useful course in the specialization. T
+This is the most useful course in the specialization. 
 
-he lecturer explained the concept in a relatively reasonable pace and in detailed. Other than theory, there are many hands-on cases you can practice during the class. 
+The lecturer explained the concept in a relatively reasonable pace and in detailed. Other than theory, there are many hands-on cases you can practice during the class. 
 
 The course covers the “caret” package in R, which is very useful in today’s machine learning. 
 
