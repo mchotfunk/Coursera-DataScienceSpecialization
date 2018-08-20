@@ -1,8 +1,255 @@
 ---
-title: "Week 2 Notes"
+title: 'Class notes: Practical Machine Learning'
 output:
   pdf_document: default
   html_document: default
+author: Andrew Abisha Hu
+---
+# **Table of content**
+
+* **Week1**
+
+        * Intro to machine learning
+        
+* **Week2: Caret Package**
+
+
+        * Data splitting
+                * createDataPartition
+                * createResample
+                * createTimeSlices
+                * K-fold
+                
+        * preProcess
+                * standardizing
+                        * center and scale
+                        * box-cox
+                        * imputing data
+                        
+        * Covariate creation (features building)
+                * dummy variables
+                * Removing zero covariates
+                
+        * Splines
+        
+        * Preprocessing with Principal Components Analysis (PCA)
+        
+        * Predicting with regression
+        
+        * Data splitting
+                * createDataPartition
+                * createResample
+                * createTimeSlices
+                * K-fold
+                
+        * Training/testing functions
+        
+        * Model comparison
+        
+        * confusionMatrix
+        
+* **Week3: Trees **
+
+        * Predicting with trees
+        * Bagging
+        * Random Forests
+        * Boosting
+        * Model Based Prediction
+        
+* **Week4**
+
+        * Combine predictors
+
+---
+
+# **Week1**
+
+
+## Process:
+
+question -> input data -> features -> algorithm -> parameters -> evaluation 
+
+
+**Features matter!**
+
+__Properties of good features__
+
+* Lead to data compression
+* Retain relevant information
+* Are created based on expert application knowledge
+
+__Common mistakes__
+
+* Trying to automate feature selection
+* Not paying attention to data-specific quirks
+* Throwing away information unnecessarily
+
+**Algorithms matter less than you'd think**
+
+**Issues to consider:**
+
+Interpretable
+
+> Simple
+
+> Accurate
+
+> Fast
+
+> Scalable
+
+## In sample and out sample error
+
+__In Sample Error__: The error rate you get on the same
+data set you used to build your predictor. Sometimes
+called resubstitution error.
+
+__Out of Sample Error__: The error rate you get on a new
+data set. Sometimes called generalization error. 
+
+__Key ideas__
+
+1. Out of sample error is what you care about
+2. In sample error $<$ out of sample error
+3. The reason is overfitting
+  * Matching your algorithm to the data you have
+  
+  
+* Data have two parts
+  * Signal
+  * Noise
+* The goal of a predictor is to find signal
+* You can always design a perfect in-sample predictor
+* You capture both signal + noise when you do that
+* Predictor won't perform as well on new samples
+  
+
+ 
+## Prediction Study Design
+
+1. Define your error rate
+2. Split data into:
+  * Training, Testing, Validation (optional)
+3. On the training set pick features
+  * Use cross-validation
+4. On the training set pick prediction function
+  * Use cross-validation
+6. If no validation 
+  * Apply 1x to test set
+7. If validation
+  * Apply to test set and refine
+  * Apply 1x to validation 
+  
+
+ 
+[http://www2.research.att.com/~volinsky/papers/ASAStatComp.pdf](http://www2.research.att.com/~volinsky/papers/ASAStatComp.pdf) 
+
+
+## Rules of thumb for prediction study design
+
+* If you have a large sample size
+  * 60% training
+  * 20% test
+  * 20% validation
+* If you have a medium sample size
+  * 60% training
+  * 40% testing
+* If you have a small sample size
+  * Do cross validation
+  * Report caveat of small sample size
+  
+
+## Basic terms
+
+In general, __Positive__ = identified and __negative__ = rejected. Therefore:
+
+__True positive__ = correctly identified
+
+__False positive__ = incorrectly identified
+
+__True negative__ = correctly rejected
+
+__False negative__ = incorrectly rejected
+
+
+
+** Summary **
+
+![](/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Practical Machine Learning/Materials/error.jpg)
+
+## For continuous data
+
+__Mean squared error (MSE)__:
+
+$$\frac{1}{n} \sum_{i=1}^n (Prediction_i - Truth_i)^2$$
+
+__Root mean squared error (RMSE)__:
+
+$$\sqrt{\frac{1}{n} \sum_{i=1}^n(Prediction_i - Truth_i)^2}$$
+## Cross Validation:
+
+![](/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Practical Machine Learning/Materials/CV.jpg)
+
+
+
+
+
+**Key idea**
+
+1. Accuracy on the training set (resubstitution accuracy) is optimistic
+2. A better estimate comes from an independent set (test set accuracy)
+3. But we can't use the test set when building the model or it becomes part of the training set
+4. So we estimate the test set accuracy with the training set. 
+
+**_Approach_:**
+
+1. Use the training set
+
+2. Split it into training/test sets 
+
+3. Build a model on the training set
+
+4. Evaluate on the test set
+
+5. Repeat and average the estimated errors
+
+**_Used for_:**
+
+1. Picking variables to include in a model
+
+2. Picking the type of prediction function to use
+
+3. Picking the parameters in the prediction function
+
+4. Comparing different predictors
+
+
+## K-Fold
+
+![](/Users/andrewhu/Documents/GitHub/Coursera_DataScience_JHU/Practical Machine Learning/Materials/kfold.jpg)
+
+## Considerations
+
+* For time series data, data must be used in "chunks"
+
+* For k-fold cross validation
+  * Larger k = less bias, more variance
+  * Smaller k = more bias, less variance
+  
+* Random sampling must be done _without replacement_
+
+* Random sampling with replacement is the _bootstrap_
+  * Underestimates of the error
+  * Can be corrected, but it is complicated ([0.632 Bootstrap](http://www.jstor.org/discover/10.2307/2965703?uid=2&uid=4&sid=21103054448997))
+  
+* If you cross-validate to pick predictors estimate you must estimate errors on independent data. 
+
+
+---
+
+# **Week 2**
+
+
 ---
 
 
@@ -10,6 +257,7 @@ output:
 
 * Some preprocessing (cleaning)
   * preProcess
+        *Standardizing 
 * Data splitting
   * createDataPartition
   * createResample
@@ -828,3 +1076,285 @@ modelFit2 <- train(diagnosis ~ ., method = "glm", preProcess = "pca",
 confusionMatrix(predict(modelFit2, testing),testing$diagnosis)
 ```
 
+---
+
+# **Week3**
+
+---
+
+
+## 1. Predicting with trees: Iris example
+```{r iris, cache=TRUE}
+data(iris); library(ggplot2);library(caret);library(rattle)
+names(iris)
+table(iris$Species)
+
+#Model
+modFit <- train(Species ~ .,method="rpart",data=training)
+print(modFit$finalModel)
+
+#Plot tree
+plot(modFit$finalModel, uniform=TRUE, 
+      main="Classification Tree")
+text(modFit$finalModel, use.n=TRUE, all=TRUE, cex=.8)
+
+#Prettier plots
+library(rattle)
+fancyRpartPlot(modFit$finalModel)
+
+#Predict
+predict(modFit,newdata=testing)
+```
+
+** Notes **
+
+* Classification trees are non-linear models
+  * They use interactions between variables
+  * Data transformations may be less important (monotone transformations)
+  * Trees can also be used for regression problems (continuous outcome)
+  
+---
+
+
+## 2. Bagging
+
+__Basic idea__: 
+
+1. Resample cases and recalculate predictions
+2. Average or majority vote
+
+__Notes__:
+
+* Similar bias 
+* Reduced variance
+* More useful for non-linear functions
+
+* Bagging in caret ** 
+
+* Some models perform bagging for you, in `train` function consider `method` options 
+  * `bagEarth` 
+  * `treebag`
+  * `bagFDA`
+* Alternatively you can bag any model you choose using the `bag` function
+
+---
+
+## More bagging in caret
+
+```{r bag1}
+predictors = data.frame(ozone=ozone$ozone)
+temperature = ozone$temperature
+treebag <- bag(predictors, temperature, B = 10,
+                bagControl = bagControl(fit = ctreeBag$fit,
+                                        predict = ctreeBag$pred,
+                                        aggregate = ctreeBag$aggregate))
+```
+
+
+__Notes__:
+
+* Bagging is most useful for nonlinear models
+* Often used with trees - an extension is random forests
+* Several models use bagging in caret's _train_ function
+
+
+---
+
+
+## 3. Random forests
+
+1. Bootstrap samples
+2. At each split, **bootstrap variables**
+3. Grow multiple trees and vote
+
+__Pros__:
+
+1. **Accuracy**
+
+__Cons__:
+
+1. Speed
+2. Interpretability
+3. Overfitting
+
+## Example:
+
+```{r}
+#loading libraries, data, and splitting data
+data(iris); library(ggplot2); library(caret)
+inTrain <- createDataPartition(y=iris$Species,
+                              p=0.7, list=FALSE)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+
+#Random forest in caret
+modFit <- train(Species~ .,data=training,method="rf",prox=TRUE)
+modFit
+
+#take a look at one of the tree
+getTree(modFit$finalModel,k=2)
+
+
+## Predicting new values
+pred <- predict(modFit,testing); testing$predRight <- pred==testing$Species
+table(pred,testing$Species)
+```
+
+---
+# 4. Boosting
+
+## Basic idea
+
+1. Take lots of (possibly) weak predictors
+2. Weight them and add them up
+3. Get a stronger predictor
+
+
+## Basic idea behind boosting
+
+1. Start with a set of classifiers $h_1,\ldots,h_k$
+  * Examples: All possible trees, all possible regression models, all possible cutoffs.
+2. Create a classifier that combines classification
+
+
+** Wage Example **
+
+```{r wage, cache=TRUE}
+library(ISLR); data(Wage); library(ggplot2); library(caret);
+Wage <- subset(Wage,select=-c(logwage))
+inTrain <- createDataPartition(y=Wage$wage,
+                              p=0.7, list=FALSE)
+training <- Wage[inTrain,]; testing <- Wage[-inTrain,]
+```
+
+---
+
+## Fit the model
+
+```{r, dependson="wage", cache=TRUE}
+modFit <- train(wage ~ ., method="gbm",data=training,verbose=FALSE)
+print(modFit)
+```
+
+## Plot the result
+```{r}
+qplot(predict(modFit,testing),wage,data=testing)
+```
+
+---
+
+# 5. Model Based Approach
+```{r pressure}
+## Example: Iris Data
+data(iris); library(ggplot2)
+names(iris)
+table(iris$Species)
+
+## Create training and test sets
+
+
+inTrain <- createDataPartition(y=iris$Species,
+                              p=0.7, list=FALSE)
+training <- iris[inTrain,]
+testing <- iris[-inTrain,]
+dim(training); dim(testing)
+
+## Build predictions
+modlda = train(Species ~ .,data=training,method="lda")
+modnb = train(Species ~ ., data=training,method="nb")
+plda = predict(modlda,testing); pnb = predict(modnb,testing)
+table(plda,pnb)
+```
+
+## Comparison of results
+```{r,dependson="fit",fig.height=4,fig.width=4}
+equalPredictions = (plda==pnb)
+qplot(Petal.Width,Sepal.Width,colour=equalPredictions,data=testing)
+```
+
+---
+
+# **Week 4**
+
+## Combining Predictors
+
+## Key ideas
+
+* You can combine classifiers by averaging/voting
+* Combining classifiers improves accuracy
+* Combining classifiers reduces interpretability
+* Boosting, bagging, and random forests are variants on this theme
+
+## Example
+
+__Create training, test and validation sets__
+```{r wage}
+library(ISLR); data(Wage); library(ggplot2); library(caret);
+
+
+# Create a building data set and validation set
+inBuild <- createDataPartition(y=Wage$wage,
+                              p=0.7, list=FALSE)
+validation <- Wage[-inBuild,]; buildData <- Wage[inBuild,]
+
+inTrain <- createDataPartition(y=buildData$wage,
+                              p=0.7, list=FALSE)
+training <- buildData[inTrain,]; testing <- buildData[-inTrain,]
+```
+
+__ Build two different models, glm and randomForest __
+
+```{r modFit}
+mod1 <- train(wage ~.,method="glm",data=training)
+mod2 <- train(wage ~.,method="rf",
+              data=training, 
+              trControl = trainControl(method="cv"),number=3)
+```
+
+__ Predict on the testing set using the models we built __
+
+```{r predict}
+pred1 <- predict(mod1,testing); pred2 <- predict(mod2,testing)
+```
+
+
+__ Fit a model that combines predictors __
+
+```{r combine,dependson="predict"}
+predDF <- data.frame(pred1,pred2,wage=testing$wage) #Create a data frame combining pred1 and 2, and the outcome from testing set --> "Combining data set"
+combModFit <- train(wage ~.,method="gam",data=predDF) #use "gam" to fit the combining data set
+combPred <- predict(combModFit,predDF) #use the gam model to predict the combining data set
+```
+
+
+__ Testing errors __
+
+```{r ,dependson="combine"}
+sqrt(sum((pred1-testing$wage)^2))
+sqrt(sum((pred2-testing$wage)^2))
+sqrt(sum((combPred-testing$wage)^2))
+```
+
+
+---
+
+__ Predict on validation data set : For cross validation __
+
+```{r validation,dependson="combine"}
+pred1V <- predict(mod1,validation); pred2V <- predict(mod2,validation)
+predVDF <- data.frame(pred1=pred1V,pred2=pred2V)
+combPredV <- predict(combModFit,predVDF)
+```
+
+
+---
+
+__ Evaluate on validation __
+
+```{r ,dependson="validation"}
+sqrt(sum((pred1V-validation$wage)^2))
+sqrt(sum((pred2V-validation$wage)^2))
+sqrt(sum((combPredV-validation$wage)^2)) # the error is lower. Legit.
+```
+
+---

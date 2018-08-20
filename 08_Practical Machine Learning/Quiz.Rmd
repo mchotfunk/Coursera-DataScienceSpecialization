@@ -1,0 +1,455 @@
+---
+title: "Practical Machine Learning Quiz"
+output: html_document
+author: Andrew Abisha Hu
+---
+
+### Load the cell segmentation data from the AppliedPredictiveModeling package using the commands:
+
+
+1. Subset the data to a training set and testing set based on the Case variable in the data set.
+
+2. Set the seed to 125 and fit a CART model with the rpart method using all predictor variables and default caret settings.
+
+3. In the final model what would be the final model prediction for cases with the following variable values:
+
+a. TotalIntench2 = 23,000; FiberWidthCh1 = 10; PerimStatusCh1=2
+
+b. TotalIntench2 = 50,000; FiberWidthCh1 = 10;VarIntenCh4 = 100
+
+c. TotalIntench2 = 57,000; FiberWidthCh1 = 8;VarIntenCh4 = 100
+
+d. FiberWidthCh1 = 8;VarIntenCh4 = 100; PerimStatusCh1=2
+
+**Ans:**
+```{r}
+library(caret)
+library(AppliedPredictiveModeling)
+data(segmentationOriginal)
+library(rattle)
+
+inTrain <- createDataPartition(y=segmentationOriginal$Case, p=0.75, list=FALSE)
+training <- segmentationOriginal[inTrain,]
+testing <- segmentationOriginal[-inTrain,]
+
+set.seed(125)
+modFit <- train(Class ~ .,method="rpart",data=training)
+print(modFit$finalModel)
+library(rattle)
+fancyRpartPlot(modFit$finalModel)
+```
+
+
+### Load the olive oil data using the commands:
+```
+library(pgmm)
+data(olive)
+olive = olive[,-1]
+```
+These data contain information on 572 different Italian olive oils from multiple regions in Italy. Fit a classification tree where Area is the outcome variable. Then predict the value of area for the following data frame using the tree command with all defaults
+```
+newdata = as.data.frame(t(colMeans(olive)))
+```
+What is the resulting prediction? Is the resulting prediction strange? Why or why not?
+
+**Ans:**
+```{r setup, include=FALSE}
+
+library(pgmm)
+data(olive)
+olive = olive[,-1]
+
+modFit <- train(Area ~ .,method="rpart",data=olive)
+print(modFit$finalModel)
+predict(modFit,newdata=as.data.frame(t(colMeans(olive))))
+```
+
+### Load the South Africa Heart Disease Data and create training and test sets with the following code:
+
+```
+library(ElemStatLearn)
+data(SAheart)
+set.seed(8484)
+train = sample(1:dim(SAheart)[1],size=dim(SAheart)[1]/2,replace=F)
+trainSA = SAheart[train,]
+testSA = SAheart[-train,]
+```
+Then set the seed to 13234 and fit a logistic regression model (method="glm", be sure to specify family="binomial") with Coronary Heart Disease (chd) as the outcome and age at onset, current alcohol consumption, obesity levels, cumulative tabacco, type-A behavior, and low density lipoprotein cholesterol as predictors. Calculate the misclassification rate for your model using this function and a prediction on the "response" scale:
+
+```
+missClass = function(values,prediction){sum(((prediction > 0.5)*1) != values)/length(values)}
+```
+What is the misclassification rate on the training set? What is the misclassification rate on the test set?
+
+**Ans**
+```{r }
+library(ElemStatLearn)
+data(SAheart)
+set.seed(8484)
+train = sample(1:dim(SAheart)[1],size=dim(SAheart)[1]/2,replace=F)
+trainSA = SAheart[train,]
+testSA = SAheart[-train,]
+
+
+set.seed(13234)
+modFit <- train(chd ~ age+ alcohol +obesity + tobacco + ldl + typea,method="glm",family="binomial",data=trainSA)
+missClass = function(values,prediction){sum(((prediction > 0.5)*1) != values)/length(values)}
+missClass(testSA$chd, predict(modFit, newdata = testSA))
+missClass(trainSA$chd, predict(modFit, newdata = trainSA))
+```
+
+### Load the vowel.train and vowel.test data sets:
+
+```
+library(ElemStatLearn)
+data(vowel.train)
+data(vowel.test)
+```
+
+Set the variable y to be a factor variable in both the training and test set. Then set the seed to 33833. Fit a random forest predictor relating the factor variable y to the remaining variables.
+
+Calculate the variable importance using the varImp function in the caret package. What is the order of variable importance?
+
+**Ans**
+```{r}
+library(dplyr)
+library(randomForest)
+library(ElemStatLearn)
+data(vowel.train)
+data(vowel.test)
+
+vowel.train <- mutate(vowel.train, y=factor(y))
+vowel.test <- mutate(vowel.test, y=factor(y))
+set.seed(33833)
+fit1<- randomForest(y~., data=vowel.train)
+
+order(varImp(fit1),decreasing= T)
+```
+
+---
+
+### Load the vowel.train and vowel.test data sets:
+
+```
+library(ElemStatLearn)
+
+data(vowel.train)
+
+data(vowel.test)
+
+```
+
+Set the variable y to be a factor variable in both the training and test set. Then set the seed to 33833. Fit (1) a random forest predictor relating the factor variable y to the remaining variables and (2) a boosted predictor using the "gbm" method. Fit these both with the train() command in the caret package.
+
+What are the accuracies for the two approaches on the test data set? What is the accuracy among the test set samples where the two methods agree?
+
+###Ans:
+
+Loading Libraries and data set
+```{r }
+library(ElemStatLearn)
+library(caret)
+library(dplyr)
+data(vowel.train)
+data(vowel.test)
+```
+
+Transforming data:
+```{r}
+set.seed(33833)
+vowel.train <- mutate(vowel.train, y=factor(y))
+vowel.test <- mutate(vowel.test, y=factor(y))
+```
+
+
+Fitting Model:
+```{r}
+#randomForest
+rf_fit <- train(y ~.,method="rf",
+              data=vowel.train, 
+              trControl = trainControl(method="cv"),number=3)
+#gbm model
+gbm_fit <- train(y~., method="gbm", verbose=FALSE, data=vowel.train)
+```
+
+Making predictions:
+```{r}
+pred_rf <- predict(rf_fit, vowel.test)
+pred_gbm <- predict(gbm_fit, vowel.test)
+```
+
+Checking accuracy using confusion matrix:
+```{r}
+confusionMatrix(pred_rf,vowel.test$y)
+confusionMatrix(pred_gbm,vowel.test$y)
+```
+
+Combining models:
+```{r}
+#Create the combining data frame based on our rf and gbm models
+predDF <- data.frame(pred_rf,pred_gbm,y=vowel.test$y)
+#Use gam model to train with the combining data frame
+combModFit <- train(y ~.,method="gam",data=predDF)
+pred_combining <- predict(combModFit, vowel.test)
+#Check the combining model's accuracy
+confusionMatrix(pred_rf,pred_gbm)$overall[1]
+
+#Similar calculation method
+sum(pred_rf[predDF$pred_rf == predDF$pred_gbm] == 
+        predDF$y[predDF$pred_rf == predDF$pred_gbm]) / 
+    sum(predDF$pred_rf == predDF$pred_gbm)
+```
+
+---
+
+
+### Load the Alzheimer's data using the following commands
+
+```
+library(caret)
+
+library(gbm)
+
+set.seed(3433)
+
+library(AppliedPredictiveModeling)
+
+data(AlzheimerDisease)
+
+adData = data.frame(diagnosis,predictors)
+
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+
+training = adData[ inTrain,]
+
+testing = adData[-inTrain,]
+
+```
+
+Set the seed to 62433 and predict diagnosis with all the other variables using a random forest ("rf"), boosted trees ("gbm") and linear discriminant analysis ("lda") model. Stack the predictions together using random forests ("rf"). What is the resulting accuracy on the test set? Is it better or worse than each of the individual predictions?
+
+
+### **Ans**
+
+
+Loading datasets
+```{r}
+library(caret)
+
+library(gbm)
+
+set.seed(3433)
+
+library(AppliedPredictiveModeling)
+
+data(AlzheimerDisease)
+
+adData = data.frame(diagnosis,predictors)
+
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+
+training = adData[ inTrain,]
+
+testing = adData[-inTrain,]
+```
+
+
+Fitting model:
+```{r}
+#RF
+rf_fit <- train(diagnosis~., method="rf", trControl = trainControl(method="cv"),number=3,data=training)
+#gbm
+gbm_fit <-train(diagnosis~., method="gbm",verbose=FALSE, data=training)
+#lda
+lda_fit <- train(diagnosis~., method="lda",data=training)
+```
+
+Predictions with each model:
+```{r}
+pred_rf <- predict(rf_fit, testing)
+pred_gbm <- predict(gbm_fit, testing)
+pred_lda<- predict(lda_fit,testing)
+```
+
+Checking Accuracy using confusionMatrix:
+```{r}
+confusionMatrix(pred_rf,testing$diagnosis)
+confusionMatrix(pred_gbm,testing$diagnosis)
+confusionMatrix(pred_lda,testing$diagnosis)
+```
+
+
+Combinign all the models:
+```{r}
+#Create the combining data frame
+combDF <- data.frame(pred_rf,pred_gbm,pred_lda,diagnosis=testing$diagnosis)
+
+#Use randomForest to create model, with the combining data set
+rf_overall <- train(diagnosis~., method="rf",data=combDF)
+
+#Use the combining model to predict test set
+rf_overall_pred<- predict(rf_overall,testing)
+
+#Check accuracy
+confusionMatrix(rf_overall_pred,testing$diagnosis)
+```
+
+---
+
+
+
+### Load the concrete data with the commands:
+```
+set.seed(3523)
+
+library(AppliedPredictiveModeling)
+
+data(concrete)
+
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+
+training = concrete[ inTrain,]
+
+testing = concrete[-inTrain,]
+```
+
+Set the seed to 233 and fit a lasso model to predict Compressive Strength. Which variable is the last coefficient to be set to zero as the penalty increases? (Hint: it may be useful to look up ?plot.enet).
+
+### Ans
+
+Loading:
+```{r}
+set.seed(3523)
+
+library(AppliedPredictiveModeling)
+library(elasticnet)
+data(concrete)
+
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+
+training = concrete[ inTrain,]
+
+testing = concrete[-inTrain,]
+```
+
+
+Fit model:
+```{r}
+set.seed(233)
+lasso <- train(CompressiveStrength~., method="lasso",data=training)
+plot.enet(lasso$finalModel,xvar=c("penalty"),use.color = T)
+```
+
+---
+
+
+### Load the concrete data with the commands:
+```
+set.seed(3523)
+
+library(AppliedPredictiveModeling)
+
+data(concrete)
+
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+
+training = concrete[ inTrain,]
+
+testing = concrete[-inTrain,]
+```
+Set the seed to 325 and fit a support vector machine using the e1071 package to predict Compressive Strength using the default settings. Predict on the testing set. What is the RMSE?
+
+### Ans
+
+```{r}
+set.seed(3523)
+library(e1071)
+library(AppliedPredictiveModeling)
+
+
+data(concrete)
+
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+
+training = concrete[ inTrain,]
+
+testing = concrete[-inTrain,]
+```
+
+```{r}
+#svm model
+fit <- svm(CompressiveStrength~., data=training)
+
+pred<- predict(fit,testing)
+
+RMSE(pred,testing$CompressiveStrength)
+
+```
+---
+
+Other quiz questions:
+
+### Q1
+
+```
+library(caret)
+library(AppliedPredictiveModeling)
+data(segmentationOriginal)
+library(rattle)
+
+inTrain <- createDataPartition(y=segmentationOriginal$Case, p=0.75, list=FALSE)
+training <- segmentationOriginal[inTrain,]
+testing <- segmentationOriginal[-inTrain,]
+
+set.seed(125)
+modFit <- train(Class ~ .,method="rpart",data=training)
+print(modFit$finalModel)
+library(rattle)
+fancyRpartPlot(modFit$finalModel)
+```
+
+
+
+### Q3
+```
+library(pgmm)
+data(olive)
+olive = olive[,-1]
+
+modFit <- train(Area ~ .,method="rpart",data=olive)
+print(modFit$finalModel)
+predict(modFit,newdata=as.data.frame(t(colMeans(olive))))
+```
+
+### Q4
+```
+library(ElemStatLearn)
+data(SAheart)
+set.seed(8484)
+train = sample(1:dim(SAheart)[1],size=dim(SAheart)[1]/2,replace=F)
+trainSA = SAheart[train,]
+testSA = SAheart[-train,]
+
+
+set.seed(13234)
+modFit <- train(chd ~ age+ alcohol +obesity + tobacco + ldl + typea,method="glm",family="binomial",data=trainSA)
+missClass = function(values,prediction){sum(((prediction > 0.5)*1) != values)/length(values)}
+missClass(testSA$chd, predict(modFit, newdata = testSA))
+missClass(trainSA$chd, predict(modFit, newdata = trainSA))
+```
+
+### Q5
+```
+library(dplyr)
+library(randomForest)
+library(ElemStatLearn)
+data(vowel.train)
+data(vowel.test)
+
+vowel.train <- mutate(vowel.train, y=factor(y))
+vowel.test <- mutate(vowel.test, y=factor(y))
+set.seed(33833)
+fit1<- randomForest(y~., data=vowel.train)
+
+order(varImp(fit1),decreasing= T)
+```
