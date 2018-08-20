@@ -1,7 +1,9 @@
 ---
 title: "Regression Model Notes"
 output: html_document
+author: Andrew Abisha Hu
 ---
+Note: A lot of the content is summarized from ![]https://github.com/DataScienceSpecialization/courses
 
 ##  Regression to the mean:
 
@@ -167,10 +169,10 @@ data(swiss); par(mfrow = c(2, 2))
 fit <- lm(Fertility ~ . , data = swiss); plot(fit)
 ```
 
-# The imapact of unnecessary or necessary included variables on our regression coefficients
+## The impact of unnecessary or necessary included variables on our regression coefficients
 
 
-## Variance inflation factors
+### Variance inflation factors
 * Notice variance inflation was much worse when we included a variable that
 was highly related to `x1`. 
 * We don't know $\sigma$, so we can only estimate the increase in the actual standard error of the coefficients for including a regressor.
