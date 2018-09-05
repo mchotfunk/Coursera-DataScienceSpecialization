@@ -10,9 +10,7 @@ The following notes are from JHU:
 
 
 
-## Pushing and Pulling 
-
-<img class=center src=../../assets/img/01_DataScientistToolbox/gghuboverview.png height='500'/>
+## Pushing and Pulling
 
 [http://gitready.com/beginner/2009/01/21/pushing-and-pulling.html](http://gitready.com/beginner/2009/01/21/pushing-and-pulling.html)
 
@@ -61,12 +59,5 @@ The following notes are from JHU:
 * Don't need anyone's permission to fork and make changes, but the original author is not obligated to accept your changes
 * Pull requests offer a powerful means of contributing to open source software
 
-<img class=center src=../../assets/img/01_DataScientistToolbox/pull_request1.png height='150'/>
 
 ---
-
-## Time to be a hacker!
-
-* Git documentation [http://git-scm.com/doc](http://git-scm.com/doc)
-* Github help [https://help.github.com/](https://help.github.com/)
-* Google/Stack Overflow are great for Github
