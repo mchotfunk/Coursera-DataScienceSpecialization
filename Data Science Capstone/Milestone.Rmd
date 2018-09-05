@@ -1,0 +1,228 @@
+---
+title: "Data Science Capstone: MileStone"
+author: "Andrew Abisha Hu"
+date: "8/21/2018"
+output: html_document
+---
+
+
+## Introduction
+
+The goal here is to build your first simple model for the relationship between words. This is the first step in building a predictive text mining application. You will explore simple models and discover more complicated modeling techniques.
+
+###  Task to accomplish
+
+1. Build basic n-gram model - using the exploratory analysis you performed, build a basic n-gram model for predicting the next word based on the previous 1, 2, or 3 words.
+
+2. Build a model to handle unseen n-grams - in some cases people will want to type a combination of words that does not appear in the corpora. Build a model to handle cases where a particular n-gram isn't observed.
+
+
+
+Does the link lead to an HTML page describing the exploratory analysis of the training data set?
+
+Has the data scientist done basic summaries of the three files? Word counts, line counts and basic data tables?
+
+Has the data scientist made basic plots, such as histograms to illustrate features of the data?
+
+Was the report written in a brief, concise style, in a way that a non-data scientist manager could appreciate?
+
+
+---
+
+
+## Executive Summary
+
+The objective of this milestone report is to explain the process of building the n-grams model in order to create a Natural Language Processing (NLP) App and present a basic exploratory analysis of the data set. 
+
+I use the file that contains "English" language only, sources from blog, twitter and news. Because the original data file is too huge, I sample them with 25000 rows in each source (Twitter, Blog and News), and then combine them altogether to a file called "sample" (with total 75000 observations)
+
+After create the sample file, I start cleaning the data, removing the unwanted symbols. Getting the data prepared, I run the sample data through the "Work Flow". That is: Corpus, Tokenization and create a Document Frequency Matrix (DFM). 
+
+Finally, I did a exploratory analysis using the dfm just created, providing top 20 features in each dfm with ggplot.
+
+
+
+Note: I use the "quanteda" package instead of the classic text mining "tm" package becuase quanteda is simply more efficient.
+
+
+## Data Processing
+
+### Loading libraries
+```{r loading}
+suppressWarnings(library(stringi))
+#suppressWarnings(library(NLP))
+suppressWarnings(library(ggplot2))
+suppressWarnings(library(quanteda))
+suppressWarnings(library(dplyr))
+suppressWarnings(library(data.table))
+```
+
+### Reading the data:
+
+```{r }
+#Set work directory
+setwd("/users/andrewhu/desktop/final/en_US")
+#Read text file
+enblogrul <- file("en_US.blogs.txt", open="rb") 
+entwurl <- file("en_US.twitter.txt", open="rb")
+enneurl <- file("en_US.news.txt", open="rb")
+
+#Read in the lines
+en_blogs<- readLines(enblogrul, encoding = "UTF-8", skipNul=TRUE)
+
+en_tw<- readLines(entwurl, encoding = "UTF-8", skipNul=TRUE)
+
+en_news<- readLines(enneurl, encoding = "UTF-8", skipNul=TRUE)
+
+```
+
+### Summaries of three files:
+
+```{r}
+
+# legnth of Lines for each file 
+length(en_blogs) 
+length(en_tw)  
+length(en_news) 
+
+# Numbers of words for each file
+sum(stri_count_words(en_blogs)) 
+sum(stri_count_words(en_news))  
+sum(stri_count_words(en_news))
+
+# max characters  for each file
+max(nchar(en_blogs))
+max(nchar(en_tw)) 
+max(nchar(en_news))
+```
+
+---
+
+### Sampling the data 
+
+Simply sample each file of n rows, and then combine them.
+```{r}
+set.seed(525)
+mini_tw <- sample(en_tw, size = 25000, replace = F)
+mini_blogs <- sample(en_blogs, size = 25000, replace = F)
+mini_news <- sample(en_news, size = 25000, replace = F)
+
+sample <- c(mini_tw,mini_blogs,mini_news)
+
+```
+
+### Cleaning data
+```{r}
+# filter weird symbols
+sample <- gsub("[^[:alpha:][:space:]']", " ", sample)
+sample <- gsub("ã", "'", sample)
+sample <- gsub("ð", "'", sample)
+
+sample <- gsub(" #\\S*","", sample) #delete hastag
+sample <- gsub("(f|ht)(tp)(s?)(://)(\\S*)", "", sample) # delete http links
+sample <- gsub("[^0-9A-Za-z///' ]", "", sample) #delete special chars
+
+#check the length for our sample
+length(sample)
+```
+
+----
+## Work flow: 
+
+
+### Corpus:
+
+**Purpose:** 
+
+```
+ 1. Save character strings and variables in a data frame
+ 
+ 2. Combine texts with document-level variables
+ 
+```
+```{r corpus}
+#corpus for the whole sample
+corp <- corpus(sample)
+```
+
+
+### Tokens:
+
+**Purpose:**
+
+```
+Stores tokens in a list of vectors
+```
+
+```{r token}
+#tokenization for the corpus
+toks <- tokens(corp)
+
+#generate ngrams for 1~3
+unigram <- tokens_ngrams(toks, n=1)
+bigram <- tokens_ngrams(toks, n=2)
+trigram <- tokens_ngrams(toks, n=3)
+```
+
+### Document feature matrix (DFM)
+
+**Purpose:**
+
+```
+Represents frequencies of features in documents in a matrix
+```
+
+```{r dfm }
+#document frequency matrix for ngram 1~4
+unigram_dfm <- dfm(unigram, what="fasterword", ngrams=1)
+
+bigram_dfm <- dfm(bigram, what="fasterword", ngrams=2)
+
+trigram_dfm <- dfm(trigram, what="fasterword", ngrams=3)
+```
+
+
+## Exploratory Analysis:
+
+After processing the data, we can start creating top features for each n grams, subsetting them into different data frame and then plotting them to see the frequencies. 
+```{r}
+#Create top features for each n gram
+top20_n1<- topfeatures(unigram_dfm,20)
+top20_n2<- topfeatures(bigram_dfm ,20)
+top20_n3<- topfeatures(trigram_dfm,20)
+
+
+#create data frame 
+top20_df_n1 <- data.frame(word=names(top20_n1), freq=top20_n1,row.names = NULL)
+top20_df_n2 <- data.frame(word=names(top20_n2), freq=top20_n2,row.names = NULL)
+top20_df_n3 <- data.frame(word=names(top20_n3), freq=top20_n3,row.names = NULL)
+
+
+#Bar chart for ngram:1, top 20 features
+g <- ggplot(top20_df_n1[1:20,], aes(reorder(word,-freq),freq)) 
+g + geom_bar(stat="identity") + labs(x= "words", y= "freq")+coord_flip()
+
+#Bar chart for ngram:2, top 20 features
+g <- ggplot(top20_df_n2[1:20,], aes(reorder(word,-freq),freq)) 
+g + geom_bar(stat="identity")+ labs(x= "words", y= "freq")+coord_flip()
+
+#Bar chart for ngram:3, top 20 features
+g <- ggplot(top20_df_n3[1:20,], aes(reorder(word,-freq),freq)) 
+g + geom_bar(stat="identity") + labs(x= "words", y= "freq")+coord_flip()
+```
+
+## Interesting Findings:
+
+1. In the unigram, prepositions, such as "to" "a" "of" appear frequent. The most frequent word is "the".
+
+2. In the bigram, prepositions phrases or conjunctions are the most frequent. Such as 
+"one of"", "a lot", "as well", "some of"
+
+3. In the trigram, things related to positions, like "first"", "middle"" and "end" appears a lot. For example, the most frequent one is "at the end", "the end of", "end of the". The second one is "in the middle", "the middle of", "middle of the". Also , "by the end", "for the first" are also among top 10.
+
+
+## Next Step:
+
+Next, I will use Kneser-Kney Smoothing to calculate the probability based on a given conditon of what specific word appear at what position. And then I will create a function to predict the 3rd word given first 2 words, and predict the 2nd word given the first word.
+
+

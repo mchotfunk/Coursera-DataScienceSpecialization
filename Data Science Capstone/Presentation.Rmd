@@ -1,0 +1,72 @@
+---
+title: "NLP Presentation"
+author: "Andrew Abisha Hu"
+date: "9/4/2018"
+output: ioslides_presentation
+---
+
+## Introduction:
+
+- This project is corporated with SwiftKey to make a simple Natural Language Processing (NLP) App. Data is offered by SwiftKey and we use the English language only. Sources of the the text data set include Twitter, News and Blogs.
+
+- The purpose of this Shiny app is to predict the next word given previous words, the most accurate will be given one or two words, in order to predict the 2nd word and the 3rd word.
+
+- The App is very easy to use: Just enter the words in the input area, and wait for a couple seconds. The final prediction will come out.
+
+
+## Data Sampling:
+
+- We sample the data from 3 of the sources (Twitter, blogs and news), each with 25,000 observations (lines). The purpose of doing this is to speed up the process. After sampling the data from the 3 sources, I remove some unwanted symbols in the sample data.
+
+```
+set.seed(525)
+mini_tw <- sample(en_tw, size = 25000, replace = F)
+mini_blogs <- sample(en_blogs, size = 25000, replace = F)
+mini_news <- sample(en_news, size = 25000, replace = F)
+
+sample <- c(mini_tw,mini_blogs,mini_news)
+
+# filter weird symbols
+sample <- gsub("[^[:alpha:][:space:]']", " ", sample)
+sample <- gsub("ã", "'", sample)
+sample <- gsub("ð", "'", sample)
+```
+
+
+
+## Algorithm Explain
+
+- Three different ngrams-- unigram, bigram and trigram are used for the prediction. I implement  **Kneser-Kney Smoothing** to calculate the probability given a word "the number of times it was positioned at the first place and the second place."
+
+```
+#Kneser-Kney Smoothing
+discount_value <- 0.75
+
+######## Bi-Gram Probability ###########
+# number of words in Bi gram 
+num_words_bigram <- nrow(bi_dt[by = .(word_1, word_2)])
+
+# Calculating the probability: for a word "given the number of times it was the second word"
+prob_bigram <- bi_dt[, .(Prob = ((.N) / num_words_bigram)), by = word_2]
+setkey(prob_bigram, word_2)
+
+# Assigning the previos probabilities (prob_bigram),  to unigrams
+uni_dt[, Prob := prob_bigram[word_1, Prob]]
+uni_dt <- uni_dt[!is.na(uni_dt$Prob)]
+
+prob_ni <- bi_dt[, .(N = .N), by = word_1]
+setkey(prob_ni, word_1)
+```
+
+## Links:
+
+To run the **Shiny App**, click the link below:
+[ShinyApp]https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/
+
+
+Check my **Github**, containing all the notes and projects from *DataScience Specialization*, Coursera:
+[GitHub]https://github.com/mchotfunk
+
+
+
+
