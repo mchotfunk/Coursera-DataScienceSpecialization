@@ -1,0 +1,12 @@
+name: DataScience-CapStone-NLP
+title: DataScience-CapStone-NLP
+username:
+account: mchotfunk
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 419746
+bundleId: 1569654
+url: https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/
+when: 1536100211.29853
+asMultiple: FALSE
+asStatic: FALSE
