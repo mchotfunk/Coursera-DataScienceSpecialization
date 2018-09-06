@@ -127,7 +127,7 @@ This is overall a fun course to take. It introduces how to develop a simple Shin
 
 However, developing data products might not be my future pursuit so I’m not that interested in learning these stuffs at this stage.
 
-Check out my "messy" app:
+Check out my first app "Prediction of Ozone Emissions within NY State":
 
 ![ShinyApp]https://mchotfunk.shinyapps.io/FinalProject/
 
