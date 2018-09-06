@@ -12,22 +12,22 @@ including 10 courses, each of the them containing 4 weeks with different subject
 
 This specialization is NOT for beginners —although it seems so. It does not assume you to have basic R knowledge. However, if you are new to R, or even with basic knowledge in R — you will still have A LOT OF hard time. 
 
-Most of the contents are covered in a past pace explaining within a short period of time. Sadly to say, the courses are not organized well overall. 
+Most of the contents are covered in a fast pace explaining within a short period of time. Sadly to say, the courses are not organized well overall. 
 
-The assignments in the class are mostly not directly related to the lecture, so you will have to do a lot of research outside the class. But the good point is that, these assignments can help you leverage your skills in data science because you are actually handling real-world problems, with real-world data. 
+Assignments in the class are mostly not directly related to the lecture, so you will have to do a lot of research outside the class. But the good point is that, these assignments can help you leverage your skills in data science because you are actually handling real-world problems, with real-world data. 
 
-So my key takeaway is that— if you are really a newbie to R language, datacamp is your first choice. If you are already familiar with R, and hope to **augment your data science knowledge to another level**, learning this specialization **with datacamp together**, will enable you to be synergetic since these two MOOC are actually **complement to each other.**
+So my key takeaway is that— if you are really a newbie to R language, this might not be your first-choice. If you are already familiar with R, and hope to **augment your data science knowledge to another level**, learning this specialization **with datacamp together**, will enable you to be synergetic since these two MOOC (Massive open online course) are actually **complement to each other.**
 
 ---
 
 
 ## Difference between coursera and datacamp
 
-Courses on coursera are taught by videos— you watch several clips, and answer quiz or complete assignments (projects). Datacamp— are taught by interactive process. You have many mini self-practices through your learning process.
+Courses on coursera are taught by videos— you watch several clips, and answer quiz or complete assignments (projects). Datacamp— is taught by interactive process. You have many mini self-practices through your learning process.
 
 The **most disadvantage from Datacamp is that**, without handling a real-project, you don’t actually understand how to apply R programming skills in real life — You only learn the syntax. Using the analogy of learning a foreign language, you only memorize the vocabulary and don’t know how to use them. Without practicing, you will forget these “vocabularies” quickly.
 
-Hence, Datacamp has a better tutorial (learning process) and coursera, at least this Specialization, has better opportunities to practice your skills. **If you can utilize these two MOOC together, you will have a better experience and gain the most of it.**
+To sum up, Datacamp has a better tutorial (learning process) and coursera, at least this Specialization, has better opportunities to practice your skills. **If you can utilize these two MOOCs together, you will have a better experience and gain the most of it.**
 
 The following is my in-depth reviews of all the courses in this Specialization:
 
@@ -38,7 +38,7 @@ The following is my in-depth reviews of all the courses in this Specialization:
 
 Rating: N/A
 
-This course teaches you how to use terminal to submit your work from local to Github. Now the Github has a desktop version so you can manage your work in a relatively simple way. Submitting work on your Github is essential becuase this enables others to reproduce your work. It is important in today's data science industry.
+This course simply teaches you how to install R and how to use terminal to submit your work from local to Github. Now the Github has a desktop version so you can manage your work in a relatively simple way. Submitting work to your Github is essential becuase this enables others to reproduce your work. It is important in today's data science industry.
 
 ---
 
@@ -46,9 +46,9 @@ This course teaches you how to use terminal to submit your work from local to Gi
 
 Rating: 1 out of 5
 
-This is **the toughest course** in this specialization. (Yes, and it is at the beginning).
+This is **the toughest course** in this specialization. (Yes, and it is at the beginning of this specialization).
 
-The content addressing in this class is very basic: Write a simple for-loop, introduction to self-defined functions, subset the data and the “Apply-related” functions. However, the projects (assignment) in this course are so much different —  it requires way more research online and nearly none of the required skills are covered in the lecture (that escalated quickly).
+The content addressing in this class is very basic: Write a simple for-loop, introduction to self-defined functions, subset the data and the “Apply-related” functions. However, the projects (assignment) in this course are so much different —  it requires way more research and nearly none of the required skills are covered in the lecture (that escalated quickly).
 
 To sum up, this course is poorly managed and if you are not familiar with R (at least intermediate level), you will be very frustrated and start doubting yourself. Don't be! Keep on struggling.
 
@@ -60,9 +60,9 @@ Rating: 3 out of 5
 
 This course covers from getting data online (e.g. read HTML files) to making the data tidy. The contents starting from week 3 are very useful: It teaches you how to subset and sort the data, clean the missing values and create new variables in your data frame. 
 
-In addition, the **introduction to “dplyr” is also killing**— the most practical package and skill I will surely apply in the future. 
+In addition, the **introduction to “dplyr” is killing**— the most practical package and skill I will surely apply in the future. 
 
-Finally, the lecture also covers finding values in text, which implements frequently in the upcoming projects in this specialization. It’s a pity that the project in this course only requires you to merge the tables. It will be better if we can practice the data manipulating skill in the project.
+Finally, the lecture also covers finding values in text (simple text mining), which implements frequently in the upcoming projects in this specialization. It’s a pity that the project in this course only requires you to merge the tables. It will be better if we can practice the data manipulating skill in the project.
 
 ---
 
@@ -72,7 +72,7 @@ Rating: 4 out of 5
 
 This course covers practical plotting system in R, and I found the **ggplot** most useful. Lecturer explained the concept quite concise and clear. It’s very easy to get to know how the structure for a ggplot is. This course features with practical hands-on assignment which you can practice skills you learned in this class. 
 
-However, some of the contents might not be suitable to be addressed in this course, for example the K-means clustering. It is explained in a fast pace and did not cover completely. Overall, it’s a good course worth to take.
+However, some of the contents might not be suitable to be addressed in this course, for example, the K-means clustering. It is explained in a fast pace and did not cover completely. Overall, it’s a good course worth to take.
 
 ---
 
@@ -82,7 +82,7 @@ Rating:  3 out of 5
 
 This class teaches you how to develop reproducible research using R-Markdown. It’s very practical and essential in today’s data science industry. If you want to build your own Github, you should understand how to use R-markdown file to record the work you’ve done and let others to reproduce it. 
 
-But there are some handy cheatsheets for syntax of R-markdown online. Simply following the cheatsheet should enable you to write R-markdown files. This class seems a little bit redundant and not necessary for me (just personal opinion). 
+But there are some handy cheatsheets for learning the syntax of R-markdown online. Simply following the cheatsheet should enable you to write R-markdown files. This class seems a little bit redundant and not necessary for me (just personal opinion). 
 
 However, the assignment in this class handles well— It offers you an opportunity to practice what you’ve learned in previous class and give you an idea of how a report should look like.
 
@@ -92,7 +92,7 @@ However, the assignment in this class handles well— It offers you an opportuni
 
 Rating: 1 out of 5
 
-This is the **worst class in the specialization**. The lecturer tries to cover a lot of concept at the speed of light and assumes that you have a strong background in statistics. Even for me, a master student who takes marketing analytics concentration and learned statistics just months ago, I still struggled a lot and had a hard time. 
+This is the **worst class in the specialization**. The lecturer tries to cover a lot of concept at the speed of light and assumes that you have a strong background in statistics. Even for me, a master student who took marketing analytics concentration and learned statistics just months ago, I still struggled a lot and had a hard time. 
 
 This course is so poorly managed that many people also complain at the online forum, and I have no idea why the lecturer hasn’t updated the class. The good thing is that it motivates me to review my stats knowledge, reminding me of the nightmare once again. 
 
@@ -118,7 +118,7 @@ The course covers the **“caret” package** in R, which is very useful in toda
 
 Highly recommend this course, but be prepared to handle a lot of content! (check my class notes to get what I’m saying)
 
-![Notes]https://github.com/mchotfunk/Coursera-DataScienceSpecialization/blob/master/08_Practical%20Machine%20Learning/Class%20notes.Rmd
+https://github.com/mchotfunk/Coursera-DataScienceSpecialization/blob/master/08_Practical%20Machine%20Learning/Class%20notes.Rmd
 
 ---
 
@@ -153,5 +153,11 @@ Check my language prediction app:
 
 ---
 
+## Final words:
 
+I took this specialization because it is very popular on coursera. However, after several researches I found out that there are more options that are way more suitable for me or for anyone that is interested in pursuing Business Analyst/ Marketing Analyst positions. Such as Statistics in R, offered by Duke. Or Machine Learning in R, offered by U of Wisconsin. No matter which courses you take, I think one thing to keep that in mind is that, you need to find your own opportunites to practice your skill with real-world project-- do not simply just learn the syntax. The know-how of applying programming knowledge, and the sense of handling the data-- are definitely the keys to success.
+
+May the Lord bless you all.
+
+-- Andrew Hu.
 
