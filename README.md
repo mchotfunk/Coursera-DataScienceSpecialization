@@ -8,6 +8,8 @@
 
 **Exploratory Analysis Final Project: https://bit.ly/2MMYKBD**
 
+**Reproducible Research Final Project:https://bit.ly/2oGRXLo**
+
 **Regression Model Final Project: https://bit.ly/2MSb2sg**
 
 **Practical Machine Learning Final Project: https://bit.ly/2oIKI5F**
