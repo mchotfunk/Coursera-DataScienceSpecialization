@@ -2,7 +2,7 @@
 
 ### Author: Anderw Abisha Hu
 
-### Check out all the courses materials: ![]https://github.com/mchotfunk/Coursera-DataScienceSpecialization
+### []https://github.com/mchotfunk/Coursera-DataScienceSpecialization
 
 ---
 
