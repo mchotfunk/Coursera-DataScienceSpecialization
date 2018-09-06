@@ -2,7 +2,9 @@
 
 Ratings: N/A
 
-This course teaches you how to use terminal to submit your work from local to Github.
+This course simply teaches you how to download R, install R, install R package...
+
+and use terminal to submit your work from local to Github.
 
 Github has a desktop version now, so you can manage your work in a relatively simple way. 
 
