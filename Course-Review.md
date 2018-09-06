@@ -1,5 +1,7 @@
 # Course review: Data Science Specialization by JHU
 
+### Author: Anderw Abisha Hu https://github.com/mchotfunk
+
 ---
 
 

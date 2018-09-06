@@ -1,10 +1,13 @@
-# DataScience_JHU
-Coursera: Data Science Specialization by JHU
+# Highlights from this Specialization:
 
+**Course-Review: https://bit.ly/2NSiUqv**
 
-Dear All:
+**ShinyApp("Prediction of Ozone Emissions in NY State") : https://mchotfunk.shinyapps.io/FinalProject/**
 
-Here I record all the process while I'm learning from the Data Science Specilization by JHU on Coursera. I will write a review for all the included courses when I finish this specialization (approx. at the end of Aug). 
+**NLP App (Word Prediction): https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/**
 
-The following is my LinkedIn. Please feel free to contact me:
-https://www.linkedin.com/in/abishahu/ 
+**Exploratory Analysis Final Project: https://bit.ly/2MMYKBD**
+
+**Regression Model Final Project: https://bit.ly/2MSb2sg**
+
+**Practical Machine Learning Final Project: https://bit.ly/2oIKI5F**
