@@ -1,6 +1,6 @@
 # Highlights from this Specialization:
 
-** Course-Review: https://bit.ly/2NSiUqv **
+** Course-Review: https://bit.ly/2NSiUqv**
 
 ** ShinyApp("Prediction of Ozone Emissions in NY State") : https://mchotfunk.shinyapps.io/FinalProject/ **
 
