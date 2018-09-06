@@ -16,6 +16,7 @@ shinyUI(fluidPage(
         
         # Application title
         titlePanel("Predict Emissions of Ozone within New York State"),
+        h3("Author: Andrew Abisha Hu"),
         
         sidebarLayout(
                 sidebarPanel(
@@ -43,28 +44,44 @@ shinyUI(fluidPage(
                 mainPanel(
                         h2("Introduction:"),
                         p("The purpose of this Shiny app is to predict Ozone given different predictors
-                          . Input them to see the model first:"),
-                        h3("Regression Plot:"),
-                        plotOutput("OzonePlot"),
-                        h3("Model Summary"),
-                        verbatimTextOutput("summaryFit"),
-                       
-                        
-                
-                        h3("Predictions for the Solar Radiation selected:"),
-                        verbatimTextOutput("indpredso"),
-                        h3("Predictions for Ozone given levels of Solar Radiation:"),
-                        verbatimTextOutput("pred1"),
-                        h3("Predictions for the Wind Speed selected:"),
-                        verbatimTextOutput("indpredwi"),
-                        h3("Predictions for Ozone given levels of Wind Speed:"),
-                        verbatimTextOutput("pred2"),
-                        h3("Predictions for the Temperature selected:"),
-                        verbatimTextOutput("indpredte"),
-                        h3("Predictions for Ozone given levels of Temperature:"),
-                        verbatimTextOutput("pred3")
+                          . Input differnt predictors and click tabs to see results:"),
+                        tabsetPanel(type= "tabs",
+                                    tabPanel("Regression Plot:",
+                                            br(),
+                                            plotOutput("OzonePlot")
+                                            ),
+                                    tabPanel("Model Summary",
+                                            br(),
+                                            verbatimTextOutput("summaryFit")
+                                            ),
+                                    tabPanel("Predictions for the Solar Radiation selected:",
+                                             br(),
+                                             verbatimTextOutput("indpredso"),
+                                             br(),
+                                             "Predictions for Ozone given levels of Solar Radiation:",
+                                             br(),
+                                             verbatimTextOutput("pred1")
+                                             ),
+                                    tabPanel("Predictions for the Wind Speed selected:",
+                                             br(),
+                                             verbatimTextOutput("indpredwi"),
+                                             br(),
+                                             "Predictions for Ozone given levels of Wind Speed:",
+                                             br(),
+                                             verbatimTextOutput("pred2")
+                                             ),
+                                    tabPanel("Predictions for the Temperature selected:",
+                                             br(),
+                                             verbatimTextOutput("indpredte"),
+                                             br(),
+                                             "Predictions for Ozone given levels of Temperature:",
+                                             br(),
+                                             verbatimTextOutput("pred3")
+                                             )
                         
                         
                 )
         )
 ))
+
+)
