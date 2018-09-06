@@ -25,12 +25,13 @@ So my key takeaway is that— if you are really a newbie to R language, this mig
 
 Courses on coursera are taught by videos— you watch several clips, and answer quiz or complete assignments (projects). Datacamp— is taught by interactive process. You have many mini self-practices through your learning process.
 
-The **most disadvantage from Datacamp is that**, without handling a real-project, you don’t actually understand how to apply R programming skills in real life — You only learn the syntax. Using the analogy of learning a foreign language, you only memorize the vocabulary and don’t know how to use them. Without practicing, you will forget these “vocabularies” quickly.
+The **most disadvantage of Datacamp is that**, without handling a real-project, you don’t actually understand how to apply R programming skills in real life — You only learn the syntax. Using the analogy of learning a foreign language, you only memorize the vocabulary and don’t know how to use them. Without practicing, you will forget these “vocabularies” quickly.
 
-To sum up, Datacamp has a better tutorial (learning process) and coursera, at least this Specialization, has better opportunities to practice your skills. **If you can utilize these two MOOCs together, you will have a better experience and gain the most of it.**
+To sum up, Datacamp has a better tutorial (learning process) and coursera, at least this specialization, has better opportunities to practice your skills. **If you can utilize these two MOOCs together, you will have a better experience and gain the most of it.**
 
-The following is my in-depth reviews of all the courses in this Specialization:
+The following is my in-depth reviews of all the courses in this specialization:
 
+---
  
 ## Reviews: 
 
