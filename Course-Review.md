@@ -1,4 +1,11 @@
+# Course review: Data Science Specialization by JHU
+
+---
+
+
 ## Executive Summary:
+
+The data science specialization includes 10 courses, each of the them containing 4 weeks with different subjects.
 
 This specialization is NOT for beginners —although it seems like. It does not assume you to have basic R knowledge. However, if you are new to R, or even with basic knowledge in R — you will still have A LOT OF hard time. 
 
@@ -6,20 +13,20 @@ Most of the contents are covered in a past pace explaining within a short period
 
 The assignments in the class are mostly not directly related to the lecture, so you will have to do a lot of research outside the class. But the good point is that, these assignments can help you leverage your skills in data science because you are actually handling real-world problems, with real-world data. 
 
-So my key takeaway is that— if you learn this specialization **with datacamp together**, you will be synergetic since these two MOOC are actually complement to each other.
+So my key takeaway is that— if you are really a newbie to R language, datacamp is your first choice. If you are already familiar with R, and hope to **augment your data science knowledge to another level**, learning this specialization **with datacamp together**, will enable you to be synergetic since these two MOOC are actually **complement to each other.**
+
+---
 
 
 ## Difference between coursera and datacamp
 
-Courses on coursera are taught by videos— you watch several clips, and answer quiz questions or do assignments (projects). Datacamp— are taught by interactive process. You have many mini self-practice through your learning process.
+Courses on coursera are taught by videos— you watch several clips, and answer quiz or complete assignments (projects). Datacamp— are taught by interactive process. You have many mini self-practices through your learning process.
 
 The **most disadvantage from Datacamp is that**, without handling a real-project, you don’t actually understand how to apply R programming skills in real life — You only learn the syntax. Using the analogy of learning a foreign language, you only memorize the vocabulary and don’t know how to use them. Without practicing, you will forget these “vocabularies” quickly.
 
-Hence, the Datacamp has a better tutorial (learning process) and coursera, at least this Specialization, has better opportunities to practice your skills. **If you can utilize these two MOOC together, you will have a better experience and gain the most of it.**
+Hence, Datacamp has a better tutorial (learning process) and coursera, at least this Specialization, has better opportunities to practice your skills. **If you can utilize these two MOOC together, you will have a better experience and gain the most of it.**
 
 The following is my in-depth reviews of all the courses in this Specialization:
-
-
 
  
 ## Reviews: 
@@ -140,7 +147,6 @@ So I start searching what is NLP and what's the algorithm behind it. I spend alm
 Check my language prediction app:
 
 ![ShinyApp]https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/
-
 
 ---
 
