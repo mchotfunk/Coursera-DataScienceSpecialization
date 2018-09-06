@@ -1,4 +1,4 @@
-# Highlights from this Specialization:
+# Highlights:
 
 **Course-Review: https://bit.ly/2NSiUqv**
 
