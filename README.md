@@ -4,7 +4,7 @@
 
 **ShinyApp("Prediction of Ozone Emissions in NY State") : https://mchotfunk.shinyapps.io/FinalProject/**
 
-**Natural Language Processing App (Word Prediction): https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/**
+**NLP App (Word Prediction): https://mchotfunk.shinyapps.io/DataScience-CapStone-NLP/**
 
 **Exploratory Analysis Final Project: https://bit.ly/2MMYKBD**
 
