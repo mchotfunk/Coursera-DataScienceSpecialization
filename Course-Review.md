@@ -7,8 +7,8 @@
 
 ## Executive Summary:
 
-The data science specialization is taught in R language, by faculty from Johns Hopkins University Bloomberg School of Public Health,
-including 10 courses, each of the them containing 4 weeks with different subjects.
+The data science specialization is taught by faculty from Johns Hopkins University Bloomberg School of Public Health,
+including 10 courses, each of the them containing 4 weeks with different subjects, ranging from basic R programming, machine learning, to developing data products.
 
 This specialization is NOT for beginners —although it seems so. It does not assume you to have basic R knowledge. However, if you are new to R, or even with basic knowledge in R — you will still have A LOT OF hard time. 
 
