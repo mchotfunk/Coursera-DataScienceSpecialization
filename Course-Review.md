@@ -156,7 +156,7 @@ Check my language prediction app:
 
 ## Final words:
 
-I took this specialization because it is very popular on coursera. However, after several researches I found out that there are more options that are way more suitable for me or for anyone that is interested in pursuing Business Analyst/ Marketing Analyst positions. Such as Statistics in R, offered by Duke. Or Machine Learning in R, offered by U of Wisconsin. No matter which courses you take, I think one thing to keep that in mind is that, you need to find your own opportunites to practice your skill with real-world project-- do not simply just learn the syntax. The know-how of applying programming knowledge, and the sense of handling the data-- are definitely the keys to success.
+I took this specialization because it is very popular on coursera. However, after several researches I found out that there are more options that are way more suitable for me or for anyone that is interested in pursuing Business Analyst/ Marketing Analyst positions. Such as Statistics in R, offered by Duke. Or Machine Learning in R, offered by U of Wisconsin. No matter which courses you take, I think one thing to keep that in mind is that, you need to find your own opportunities to practice your skill with real-world project-- do not simply just learn the syntax. The know-how of applying programming knowledge, and the sense of handling the data-- are definitely keys to success.
 
 May the Lord bless you all.
 
