@@ -2,6 +2,8 @@
 
 ### Author: Anderw Abisha Hu https://github.com/mchotfunk
 
+**make sure to check out all the projects and notes from this class at:
+
 ---
 
 
